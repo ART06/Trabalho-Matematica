@@ -11,6 +11,7 @@ public class LifeCtrl : MonoBehaviour
     protected void Awake()
     {
         player = GetComponent<Player>();
+        health = maxHealth;
     }
     public virtual void Die()
     {

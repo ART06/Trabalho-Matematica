@@ -11,11 +11,15 @@ public class Player : MonoBehaviour
     protected Vector3 localScale;
     public int speed;
 
-    [HideInInspector] public bool canMove;
+    [HideInInspector] LifeCtrl lifeCtrl;
+
+    public bool canMove;
     [HideInInspector] public bool timeToAttack;
+
     protected void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        lifeCtrl = GetComponent<LifeCtrl>();
         canMove = true;
     }
     protected void Update()
@@ -44,7 +48,6 @@ public class Player : MonoBehaviour
     protected void PlayerImputs()
     {
         if (!canMove) return;
-
-        direction.x = Input.GetAxisRaw("Horizontal");
+        else direction.x = Input.GetAxisRaw("Horizontal");
     }
 }

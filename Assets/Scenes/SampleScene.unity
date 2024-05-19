@@ -284,6 +284,7 @@ MonoBehaviour:
   answer: 0
   calcPanel: {fileID: 1030504345}
   questionText: {fileID: 327626804}
+  asnwerVerifyText: {fileID: 274026356}
 --- !u!114 &223760639
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1913,8 +1914,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 144.99998, y: 89.004974}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 144.99998, y: 86.33998}
+  m_SizeDelta: {x: 160, y: 35.33}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1963504602
 MonoBehaviour:
@@ -1959,7 +1960,31 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1963504603}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 223760639}
+        m_TargetAssemblyTypeName: InputHandler, Assembly-CSharp
+        m_MethodName: ValidateInput
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 274026354}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!114 &1963504603
 MonoBehaviour:
   m_ObjectHideFlags: 0

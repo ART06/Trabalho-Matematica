@@ -6,22 +6,31 @@ using TMPro;
 
 public class InputHandler : MonoBehaviour
 {
-    [SerializeField] InputField inputField;
-    [SerializeField] TextMeshProUGUI resultText;
+    public InputField inputField;
+    public TextMeshProUGUI resultText;
 
     public void ValidateInput()
     {
         string input = inputField.text;
 
-        if (input.Length < 4)
+        if (float.TryParse(input, out float playerAnswer))
         {
-            resultText.text = "Invalid Input";
-            resultText.color = Color.red;
+            bool isCorrect = GameManager.instance.CheckAnswer(playerAnswer);
+            if (isCorrect)
+            {
+                resultText.text = "Resposta certa!";
+                resultText.color = Color.green;
+            }
+            else
+            {
+                resultText.text = "Burro pra caralho kkkkkk!";
+                resultText.color = Color.red;
+            }
         }
         else
         {
-            resultText.text = "Valid Input";
-            resultText.color = Color.green;
+            resultText.text = "Escreve direito porra";
+            resultText.color = Color.gray;
         }
     }
 }

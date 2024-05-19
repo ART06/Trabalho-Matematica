@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     protected Player player;
     protected Enemy enemy;
+    protected InputHandler inputhandler;
 
     public bool isFighting;
     private bool questionGenerated = false;
@@ -24,7 +25,8 @@ public class GameManager : MonoBehaviour
     public float answer;
 
     public GameObject calcPanel;
-    [SerializeField] TextMeshProUGUI questionText;
+    public TextMeshProUGUI questionText;
+    public TextMeshProUGUI asnwerVerifyText;
 
     public void Awake()
     {
@@ -38,8 +40,10 @@ public class GameManager : MonoBehaviour
     protected void Start()
     {
         calcPanel.SetActive(false);
+        asnwerVerifyText.gameObject.SetActive(false);
         player = FindObjectOfType<Player>();
         enemy = FindObjectOfType<Enemy>();
+        inputhandler = GetComponent<InputHandler>();
 
         if (player == null)
         {
@@ -71,6 +75,8 @@ public class GameManager : MonoBehaviour
         }
         else if (calcPanel != null)
         {
+            inputhandler.inputField.text = "";
+            asnwerVerifyText.gameObject.SetActive(false);
             calcPanel.SetActive(false);
             enemy.isFightingPlayer = false;
             questionGenerated = false;
@@ -108,8 +114,12 @@ public class GameManager : MonoBehaviour
     CalcType RandomOperator()
     {
         System.Array _operators = System.Enum.GetValues(typeof(CalcType));
-        System.Random _random = new System.Random();
+        System.Random _random = new (); //() = System.Random() (serve só para evitar redundância)
         CalcType _randomOperator = (CalcType)_operators.GetValue(_random.Next(_operators.Length));
         return _randomOperator;
+    }
+    public bool CheckAnswer(float playerAnswer)
+    {
+        return Mathf.Approximately(answer, playerAnswer);
     }
 }

@@ -47,7 +47,11 @@ public class Player : MonoBehaviour
     }
     protected void PlayerImputs()
     {
-        if (!canMove) return;
+        if (!canMove)
+        {
+            direction.x = 0f;
+            return;
+        }
         else direction.x = Input.GetAxisRaw("Horizontal");
     }
 }

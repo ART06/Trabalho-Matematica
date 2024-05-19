@@ -15,6 +15,7 @@ public class Enemy : MonoBehaviour
     protected void FixedUpdate()
     {
         if (DistanceToPlayer() <= fightRange) isFightingPlayer = true;
+        else isFightingPlayer = false;
     }
     protected float DistanceToPlayer()
     {

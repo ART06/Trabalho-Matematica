@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.UI;
 using UnityEditor;
 using UnityEngine;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    [HideInInspector] public enum CalcType {Plus, Minus, Multi, Division};
+    [HideInInspector] public enum CalcType { Plus, Minus, Multi, Division };
     public CalcType calcType;
 
     public static GameManager instance;
@@ -13,77 +15,93 @@ public class GameManager : MonoBehaviour
     protected Enemy enemy;
 
     public bool isFighting;
+    private bool questionGenerated = false;
 
     public string operators = "+-*/";
     public string operatorSymbol;
-     int firstNumber;
+    int firstNumber;
     int secondNumber;
     public float answer;
 
     public GameObject calcPanel;
+    [SerializeField] TextMeshProUGUI questionText;
 
     public void Awake()
     {
         if (instance == null)
         {
-            instance = null;
+            instance = this;
         }
         else Destroy(gameObject);
     }
+
     protected void Start()
     {
         calcPanel.SetActive(false);
-        player = GetComponent<Player>();
-        enemy = GetComponent<Enemy>();
+        player = FindObjectOfType<Player>();
+        enemy = FindObjectOfType<Enemy>();
+
+        if (player == null)
+        {
+            Debug.LogError("Player não encontrado na cena");
+        }
+        if (enemy == null)
+        {
+            Debug.LogError("Enemy não encontrado na cena");
+        }
     }
-    protected void Update()
+
+    private void FixedUpdate()
     {
         CombatManager();
     }
     protected void CombatManager()
     {
-        if (enemy.isFightingPlayer)
+        if (enemy != null && enemy.isFightingPlayer)
         {
             calcPanel.SetActive(true);
-            //CombatManager();
-            CalcType _randomOperator = RandomOperator();
-            player.canMove = false;
+
+            if (!questionGenerated)
+            {
+                calcType = RandomOperator();
+                RandomCalculator();
+                questionGenerated = true;
+            }
+            //player.canMove = false;
         }
-        else
+        else if (calcPanel != null)
         {
             calcPanel.SetActive(false);
             enemy.isFightingPlayer = false;
+            questionGenerated = false;
         }
     }
     protected void RandomCalculator()
     {
-        operatorSymbol += operators[Random.Range(0, operators.Length)];
-        Debug.Log(operatorSymbol);
+        operatorSymbol = operators[Random.Range(0, operators.Length)].ToString();
 
+        firstNumber = Random.Range(1, 100);
+        secondNumber = Random.Range(1, 10);
         switch (calcType)
         {
             case CalcType.Plus:
-                firstNumber += Random.Range(1, 100);
-                secondNumber += Random.Range(1, 10);
                 answer = firstNumber + secondNumber;
+                questionText.text = firstNumber + " + " + secondNumber + " = ?";
                 break;
 
             case CalcType.Minus:
-                firstNumber += Random.Range(1, 100);
-                secondNumber += Random.Range(1, 10);
                 answer = firstNumber - secondNumber;
+                questionText.text = firstNumber + " - " + secondNumber + " = ?";
                 break;
 
             case CalcType.Multi:
-                firstNumber += Random.Range(1, 100);
-                secondNumber += Random.Range(1, 10);
                 answer = firstNumber * secondNumber;
+                questionText.text = firstNumber + " * " + secondNumber + " = ?";
                 break;
 
             case CalcType.Division:
-                firstNumber += Random.Range(1, 100);
-                secondNumber += Random.Range(1, 10);
-                answer = firstNumber + secondNumber;
+                answer = firstNumber / (float)secondNumber;
+                questionText.text = firstNumber + " : " + secondNumber + " = ?";
                 break;
         }
     }

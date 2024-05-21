@@ -55,4 +55,12 @@ public class Player : Character
     {
         base.TakeDmg(_dmg);
     }
+    protected void DealDmg()
+    {
+        if (inputHandler.playerDealDmg)
+        {
+            inputHandler.playerDealDmg = false;
+            enemy.TakeDmg(atqDmg);
+        }
+    }
 }

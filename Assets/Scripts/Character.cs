@@ -5,7 +5,10 @@ using UnityEngine;
 public class Character : MonoBehaviour
 {
     protected Player player;
+    protected Enemy enemy;
     protected LifeCtrl Life;
+    protected InputHandler inputHandler;
+
     public Transform atqPos;
     public LayerMask attackLayer;
     public int atqDmg;
@@ -18,7 +21,9 @@ public class Character : MonoBehaviour
 
     protected void Awake() 
     {
+        inputHandler = GetComponent<InputHandler>();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        enemy = GameObject.FindGameObjectWithTag("Enemy").GetComponent<Enemy>();
         Life = GetComponent<LifeCtrl>();
         CauseDmg = GetComponent<CauseDmg>();
     }

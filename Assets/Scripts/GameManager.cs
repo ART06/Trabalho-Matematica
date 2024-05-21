@@ -4,6 +4,7 @@ using UnityEditor.UI;
 using UnityEditor;
 using UnityEngine;
 using TMPro;
+using UnityEngine.VFX;
 
 public class GameManager : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class GameManager : MonoBehaviour
     int firstNumber;
     int secondNumber;
     public float answer;
+    public string formatedAnswer;
 
     public GameObject calcPanel;
     public TextMeshProUGUI questionText;
@@ -72,7 +74,7 @@ public class GameManager : MonoBehaviour
                 questionGenerated = true;
                 Debug.Log(answer);
             }
-            //player.canMove = false;
+            player.canMove = false;
         }
         else if (calcPanel != null)
         {
@@ -107,7 +109,7 @@ public class GameManager : MonoBehaviour
                 break;
 
             case CalcType.Division:
-                answer = firstNumber / (float)secondNumber;
+                answer = Mathf.Round(firstNumber / secondNumber);
                 questionText.text = firstNumber + " : " + secondNumber + " = ?";
                 break;
         }

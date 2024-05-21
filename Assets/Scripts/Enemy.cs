@@ -5,12 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(LifeCtrl))]
 public class Enemy : Character
 {
-    protected InputHandler inputHandler;
     public bool isFightingPlayer;
-    protected void Start()
-    {
-        inputHandler = GetComponent<InputHandler>();
-    }
+
     protected void FixedUpdate()
     {
         if (DistanceToPlayer() <= atqRange && !Life.dead) isFightingPlayer = true;
@@ -24,6 +20,7 @@ public class Enemy : Character
     {
         if (inputHandler.monsterDealDmg)
         {
+            inputHandler.monsterDealDmg = false;
             player.TakeDmg(atqDmg);
         }
     }
@@ -32,7 +29,8 @@ public class Enemy : Character
         base.Death();
 
         //enemy.anim.GetBool("Death");
-        
+        isFightingPlayer = false;
+
         Invoke(nameof(Deactivate), 0.5f);
     }
     public override void TakeDmg(int _value)

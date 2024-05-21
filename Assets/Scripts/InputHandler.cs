@@ -8,6 +8,8 @@ public class InputHandler : MonoBehaviour
 {
     public InputField inputField;
     public TextMeshProUGUI resultText;
+    public bool monsterDealDmg;
+    public bool playerDealDmg;
 
     public void ValidateInput()
     {
@@ -18,18 +20,24 @@ public class InputHandler : MonoBehaviour
             bool isCorrect = GameManager.instance.CheckAnswer(playerAnswer);
             if (isCorrect)
             {
+                playerDealDmg = true;
+                monsterDealDmg = false;
                 resultText.text = "Resposta certa!";
                 resultText.color = Color.green;
             }
             else
             {
-                resultText.text = "Burro pra caralho kkkkkk!";
+                monsterDealDmg = true;
+                playerDealDmg = false;
+                resultText.text = "Resposta errada!";
                 resultText.color = Color.red;
             }
         }
         else
         {
-            resultText.text = "Escreve direito porra";
+            playerDealDmg = false;
+            monsterDealDmg = false;
+            resultText.text = "Resposta inválida, tente novamente.";
             resultText.color = Color.gray;
         }
     }

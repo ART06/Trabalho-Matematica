@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(LifeCtrl))]
-public class Player : MonoBehaviour
+public class Player : Character
 {
     [HideInInspector] public Rigidbody2D rb;
     [HideInInspector] public Vector2 direction;
@@ -11,15 +11,12 @@ public class Player : MonoBehaviour
     protected Vector3 localScale;
     public int speed;
 
-    [HideInInspector] LifeCtrl lifeCtrl;
-
     public bool canMove;
     [HideInInspector] public bool timeToAttack;
 
     protected void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        lifeCtrl = GetComponent<LifeCtrl>();
         canMove = true;
     }
     protected void Update()
@@ -53,5 +50,9 @@ public class Player : MonoBehaviour
             return;
         }
         else direction.x = Input.GetAxisRaw("Horizontal");
+    }
+    public override void TakeDmg(int _dmg)
+    {
+        base.TakeDmg(_dmg);
     }
 }

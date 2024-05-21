@@ -70,6 +70,7 @@ public class GameManager : MonoBehaviour
                 calcType = RandomOperator();
                 RandomCalculator();
                 questionGenerated = true;
+                Debug.Log(answer);
             }
             //player.canMove = false;
         }

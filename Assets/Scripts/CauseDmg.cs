@@ -4,15 +4,23 @@ using UnityEngine;
 
 public class CauseDmg : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public void ReceivDmg()
     {
-        
+        var _character = GetComponentInParent<Character>();
+        _character.receivingDmg = !_character.receivingDmg;
     }
-
-    // Update is called once per frame
-    void Update()
+    public void TakeDmg()
     {
-        
+        Character _character = GetComponentInParent<Character>();
+        var targets = Physics2D.OverlapCircleAll
+            (
+                _character.atqPos.position,
+                _character.atqRange,
+                _character.attackLayer
+            );
+        foreach (var target in targets)
+        {
+            target.GetComponent<Character>().TakeDmg(_character.atqDmg);
+        }
     }
 }

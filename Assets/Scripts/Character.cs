@@ -4,15 +4,39 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    protected Player player;
+    protected LifeCtrl Life;
+    public Transform atqPos;
+    public LayerMask attackLayer;
+    public int atqDmg;
+    public float atqRange;
 
-    // Update is called once per frame
-    void Update()
+    protected CauseDmg CauseDmg;
+    [HideInInspector] public bool receivingDmg;
+
+    public Animator anim;
+
+    protected void Awake() 
     {
-        
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        Life = GetComponent<LifeCtrl>();
+        CauseDmg = GetComponent<CauseDmg>();
+    }
+    public virtual void TakeDmg(int _value)
+    {
+        if (Life.dead) return;
+
+
+        TakeDmg(_value);
+
+        if (Life.health == 0) Death();
+    }
+    public virtual void Death()
+    {
+
+    }
+    public bool IsDead()
+    {
+        return Life.dead;
     }
 }

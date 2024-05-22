@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
     public string formatedAnswer;
 
     public GameObject calcPanel;
+    public GameObject lifePanel;
     public TextMeshProUGUI questionText;
     public TextMeshProUGUI asnwerVerifyText;
 
@@ -42,6 +43,7 @@ public class GameManager : MonoBehaviour
     protected void Start()
     {
         calcPanel.SetActive(false);
+        lifePanel.SetActive(false);
         asnwerVerifyText.gameObject.SetActive(false);
         player = FindObjectOfType<Player>();
         enemy = FindObjectOfType<Enemy>();
@@ -66,6 +68,7 @@ public class GameManager : MonoBehaviour
         if (enemy != null && enemy.isFightingPlayer)
         {
             calcPanel.SetActive(true);
+            lifePanel.SetActive(true);
 
             if (!questionGenerated)
             {
@@ -74,13 +77,14 @@ public class GameManager : MonoBehaviour
                 questionGenerated = true;
                 Debug.Log(answer);
             }
-            player.canMove = false;
+            //player.canMove = false;
         }
         else if (calcPanel != null)
         {
             inputhandler.inputField.text = "";
             asnwerVerifyText.gameObject.SetActive(false);
             calcPanel.SetActive(false);
+            lifePanel.SetActive(false);
             enemy.isFightingPlayer = false;
             questionGenerated = false;
         }

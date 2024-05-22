@@ -7,7 +7,7 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] private Transform player;
     [SerializeField] protected int cameraMinPos;
     [SerializeField] protected int cameraMaxPos;
-    public int cameraOffset;
+    public float cameraOffset;
 
     protected void FixedUpdate()
     {

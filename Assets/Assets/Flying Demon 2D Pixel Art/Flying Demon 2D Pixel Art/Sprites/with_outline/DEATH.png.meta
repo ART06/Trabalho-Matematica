@@ -42,7 +42,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -127,7 +127,133 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: DEATH_0
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 2
+        width: 68
+        height: 66
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e59892629ab062e4baf9fe1333616b87
+      internalID: 1009812187
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DEATH_1
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 2
+        width: 60
+        height: 54
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 553d423e3893bf340adb398a56951008
+      internalID: -863769497
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DEATH_2
+      rect:
+        serializedVersion: 2
+        x: 164
+        y: 2
+        width: 60
+        height: 54
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5d2a056be57b0c6478ae72072d542bc9
+      internalID: 1744791078
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DEATH_3
+      rect:
+        serializedVersion: 2
+        x: 246
+        y: 1
+        width: 60
+        height: 57
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ada2a0d459c311046a691ac5c3296e33
+      internalID: -810370715
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DEATH_4
+      rect:
+        serializedVersion: 2
+        x: 326
+        y: 1
+        width: 60
+        height: 57
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a6ce8dbb3663e6848ad45181a8c5d8ad
+      internalID: 1187758059
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DEATH_5
+      rect:
+        serializedVersion: 2
+        x: 407
+        y: 1
+        width: 60
+        height: 57
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 06b96f3ca87f96248bf8176f547b283b
+      internalID: 89819735
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -138,7 +264,40 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      DEATH_0: 1009812187
+      DEATH_1: -863769497
+      DEATH_10: 1676739556
+      DEATH_11: 1474888100
+      DEATH_12: -1094106593
+      DEATH_13: -966480952
+      DEATH_14: -488503638
+      DEATH_15: 379462906
+      DEATH_16: -463823188
+      DEATH_17: 121789966
+      DEATH_18: 1952850699
+      DEATH_19: 547256676
+      DEATH_2: 1744791078
+      DEATH_20: 442388289
+      DEATH_21: -837879507
+      DEATH_22: 1215901906
+      DEATH_23: -1282920648
+      DEATH_24: 889667000
+      DEATH_25: -665701766
+      DEATH_26: -1840225356
+      DEATH_27: -1713511388
+      DEATH_28: 1868274953
+      DEATH_29: -1713396878
+      DEATH_3: -810370715
+      DEATH_30: -2133201069
+      DEATH_31: -1764222328
+      DEATH_32: 1243654613
+      DEATH_4: 1187758059
+      DEATH_5: 89819735
+      DEATH_6: -58712249
+      DEATH_7: 560289636
+      DEATH_8: -224234994
+      DEATH_9: -2075048407
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

@@ -19,8 +19,9 @@ public class Player : Character
         rb = GetComponent<Rigidbody2D>();
         canMove = true;
     }
-    protected void Update()
+    protected override void Update()
     {
+        base.Update();
         Flip();
         PlayerImputs();
     }
@@ -54,13 +55,25 @@ public class Player : Character
     public override void TakeDmg(int _dmg)
     {
         base.TakeDmg(_dmg);
+        anim.SetTrigger("Hurt");
     }
-    protected void DealDmg()
+    protected override void DealDmg()
     {
+        base.DealDmg();
         if (inputHandler.playerDealDmg)
         {
+            Debug.Log(inputHandler.monsterDealDmg);
             inputHandler.playerDealDmg = false;
-            enemy.TakeDmg(atqDmg);
+            anim.SetTrigger("NormalAttack");
         }
+    }
+    protected override void Animations()
+    {
+        base.Animations();
+
+        if (direction.x != 0)
+            anim.SetFloat("VelocX", 1);
+        else
+            anim.SetFloat("VelocX", 0);
     }
 }

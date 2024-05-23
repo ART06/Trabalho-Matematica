@@ -16,19 +16,22 @@ public class Enemy : Character
     {
         return Vector2.Distance(transform.position, player.gameObject.transform.position);
     }
-    protected void DealDmg()
+    protected override void DealDmg()
     {
+        base.DealDmg();
+
         if (inputHandler.monsterDealDmg)
         {
+            Debug.Log(inputHandler.monsterDealDmg);
+            enemy.anim.SetTrigger("Attack");
             inputHandler.monsterDealDmg = false;
-            player.TakeDmg(atqDmg);
         }
     }
     public override void Death()
     {
         base.Death();
 
-        //enemy.anim.GetBool("Death");
+        enemy.anim.GetBool("Death");
         isFightingPlayer = false;
 
         Invoke(nameof(Deactivate), 0.5f);
@@ -36,7 +39,7 @@ public class Enemy : Character
     public override void TakeDmg(int _value)
     {
         base.TakeDmg(_value);
-        //enemy.anim.SetTrigger("Hurt");
+        enemy.anim.SetTrigger("Hurt");
         //ELifeCtrlSoundManager.PlaySFX(ELifeCtrlSoundManager.enemyHit);
     }
     private void Deactivate()

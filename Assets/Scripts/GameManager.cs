@@ -62,6 +62,7 @@ public class GameManager : MonoBehaviour
     private void FixedUpdate()
     {
         CombatManager();
+        inputhandler.ValidateInput();
     }
     protected void CombatManager()
     {

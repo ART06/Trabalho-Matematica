@@ -27,14 +27,20 @@ public class Character : MonoBehaviour
         Life = GetComponent<LifeCtrl>();
         CauseDmg = GetComponent<CauseDmg>();
     }
+    protected virtual void Update()
+    {
+        Animations();
+        //DealDmg();
+    }
     public virtual void TakeDmg(int _value)
     {
         if (Life.dead) return;
-
-
         TakeDmg(_value);
-
         if (Life.health == 0) Death();
+    }
+    protected virtual void DealDmg()
+    {
+
     }
     public virtual void Death()
     {
@@ -43,5 +49,9 @@ public class Character : MonoBehaviour
     public bool IsDead()
     {
         return Life.dead;
+    }
+    protected virtual void Animations()
+    {
+        anim.SetBool("Death", Life.dead);
     }
 }

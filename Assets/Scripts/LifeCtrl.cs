@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class LifeCtrl : MonoBehaviour
 {
-    [HideInInspector] public Player player;
+    [HideInInspector] public Character character;
     public int health;
     public int maxHealth;
     public bool dead;
@@ -13,22 +13,24 @@ public class LifeCtrl : MonoBehaviour
 
     protected virtual void Awake()
     {
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        character = GetComponent<Character>();
         health = maxHealth;
+    }
+    public virtual void Start()
+    {
+
     }
     public virtual void Die()
     {
         dead = true;
-        player.rb.constraints = RigidbodyConstraints2D.FreezePositionX;
-        player.rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        character.Death();
     }
     public virtual void TakeDmg(int _dmg)
     {
         if (dead) return;
 
-        healthBar.fillAmount = health / 100f;
-
-        health = Mathf.Max(health - _dmg, maxHealth);
+        health = Mathf.Max(health - _dmg, 0);
+        healthBar.fillAmount = (float)health / maxHealth;
 
         if (health == 0) Die();
     }

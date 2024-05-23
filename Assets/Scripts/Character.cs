@@ -9,6 +9,7 @@ public class Character : MonoBehaviour
     protected LifeCtrl Life;
     protected InputHandler inputHandler;
 
+    [HideInInspector] public Rigidbody2D rb;
     public Transform atqPos;
     public LayerMask attackLayer;
     public int atqDmg;
@@ -21,6 +22,7 @@ public class Character : MonoBehaviour
 
     protected void Awake() 
     {
+        rb = GetComponent<Rigidbody2D>();
         inputHandler = GetComponent<InputHandler>();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         enemy = GameObject.FindGameObjectWithTag("Enemy").GetComponent<Enemy>();
@@ -35,16 +37,12 @@ public class Character : MonoBehaviour
     public virtual void TakeDmg(int _value)
     {
         if (Life.dead) return;
-        TakeDmg(_value);
+        Life.TakeDmg(_value);
         if (Life.health == 0) Death();
-    }
-    protected virtual void DealDmg()
-    {
-
     }
     public virtual void Death()
     {
-
+        player.direction.x = 0f;
     }
     public bool IsDead()
     {

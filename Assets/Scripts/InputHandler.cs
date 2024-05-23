@@ -28,20 +28,26 @@ public class InputHandler : MonoBehaviour
 
         if (float.TryParse(input, out float playerAnswer) && GameManager.instance.asnwerVerifyText.IsActive())
         {
+            GameManager.instance.questionPanel.SetActive(false);
+            Invoke(nameof(DeactivateText), 2.0f);
             bool isCorrect = GameManager.instance.CheckAnswer(playerAnswer);
             if (isCorrect && !playerDealDmg)
             {
                 playerDealDmg = true;
-                Debug.Log(playerDealDmg);
+                player.anim.SetTrigger("NormalAttack");
                 resultText.text = "Resposta certa!";
                 resultText.color = Color.green;
+                GameManager.instance.questionGenerated = false;
+                GameManager.instance.RegenerateAnswer();
             }
             else if (!isCorrect && !monsterDealDmg)
             {
                 monsterDealDmg = true;
-                Debug.Log(monsterDealDmg);
+                enemy.anim.SetTrigger("Attack");
                 resultText.text = "Resposta errada!";
                 resultText.color = Color.red;
+                GameManager.instance.questionGenerated = false;
+                GameManager.instance.RegenerateAnswer();
             }
         }
         else if (!playerDealDmg && !monsterDealDmg)
@@ -51,5 +57,9 @@ public class InputHandler : MonoBehaviour
             resultText.text = "Resposta inválida, tente novamente.";
             resultText.color = Color.gray;
         }
+    }
+    private void DeactivateText()
+    {
+        resultText.gameObject.SetActive(false);
     }
 }

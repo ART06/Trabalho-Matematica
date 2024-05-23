@@ -2,10 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(LifeCtrl))]
 public class Player : Character
 {
-    [HideInInspector] public Rigidbody2D rb;
     [HideInInspector] public Vector2 direction;
     protected Vector2 imputs;
     protected Vector3 localScale;
@@ -16,7 +14,6 @@ public class Player : Character
 
     protected void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
         canMove = true;
     }
     protected override void Update()
@@ -52,21 +49,7 @@ public class Player : Character
         }
         else direction.x = Input.GetAxisRaw("Horizontal");
     }
-    public override void TakeDmg(int _dmg)
-    {
-        base.TakeDmg(_dmg);
-        anim.SetTrigger("Hurt");
-    }
-    protected override void DealDmg()
-    {
-        base.DealDmg();
-        if (inputHandler.playerDealDmg)
-        {
-            Debug.Log(inputHandler.monsterDealDmg);
-            inputHandler.playerDealDmg = false;
-            anim.SetTrigger("NormalAttack");
-        }
-    }
+    
     protected override void Animations()
     {
         base.Animations();

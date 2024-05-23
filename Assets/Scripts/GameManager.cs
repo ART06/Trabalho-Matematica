@@ -17,7 +17,8 @@ public class GameManager : MonoBehaviour
     protected InputHandler inputhandler;
 
     public bool isFighting;
-    private bool questionGenerated = false;
+    public bool firstEncounter;
+    [HideInInspector] public bool questionGenerated = false;
 
     public string operators = "+-*/";
     public string operatorSymbol;
@@ -28,6 +29,8 @@ public class GameManager : MonoBehaviour
 
     public GameObject calcPanel;
     public GameObject lifePanel;
+    public GameObject questionPanel;
+    public GameObject deathPanel;
     public TextMeshProUGUI questionText;
     public TextMeshProUGUI asnwerVerifyText;
 
@@ -42,8 +45,10 @@ public class GameManager : MonoBehaviour
 
     protected void Start()
     {
+        firstEncounter = false;
         calcPanel.SetActive(false);
         lifePanel.SetActive(false);
+        deathPanel.SetActive(false);
         asnwerVerifyText.gameObject.SetActive(false);
         player = FindObjectOfType<Player>();
         enemy = FindObjectOfType<Enemy>();
@@ -58,7 +63,6 @@ public class GameManager : MonoBehaviour
             Debug.LogError("Enemy não encontrado na cena");
         }
     }
-
     private void FixedUpdate()
     {
         CombatManager();
@@ -66,19 +70,20 @@ public class GameManager : MonoBehaviour
     }
     protected void CombatManager()
     {
-        if (enemy != null && enemy.isFightingPlayer)
+        if (!player.IsDead() && !enemy.IsDead() && enemy.isFightingPlayer)
         {
             calcPanel.SetActive(true);
             lifePanel.SetActive(true);
 
-            if (!questionGenerated)
+            if (!questionGenerated && !firstEncounter)
             {
                 calcType = RandomOperator();
                 RandomCalculator();
                 questionGenerated = true;
                 Debug.Log(answer);
+                firstEncounter = true;
             }
-            //player.canMove = false;
+            player.canMove = false;
         }
         else if (calcPanel != null)
         {
@@ -89,6 +94,16 @@ public class GameManager : MonoBehaviour
             enemy.isFightingPlayer = false;
             questionGenerated = false;
         }
+    }
+    public void RegenerateAnswer()
+    {
+        if (player.IsDead() == true) return;
+        Invoke(nameof(ActivatePanel), 2f);
+        calcType = RandomOperator();
+        RandomCalculator();
+        questionGenerated = true;
+        inputhandler.inputField.text = "";
+        Debug.Log(answer);
     }
     protected void RandomCalculator()
     {
@@ -129,5 +144,11 @@ public class GameManager : MonoBehaviour
     public bool CheckAnswer(float playerAnswer)
     {
         return Mathf.Approximately(answer, playerAnswer);
+    }
+    private void ActivatePanel()
+    {
+        questionPanel.SetActive(true);
+        inputhandler.playerDealDmg = false;
+        inputhandler.monsterDealDmg = false;
     }
 }

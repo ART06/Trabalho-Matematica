@@ -1152,10 +1152,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   character: {fileID: 0}
+  player: {fileID: 0}
+  enemy: {fileID: 0}
   health: 0
   maxHealth: 5
   dead: 0
   healthBar: {fileID: 1060558930}
+  sprite: {fileID: 814323098}
 --- !u!1 &760226043
 GameObject:
   m_ObjectHideFlags: 0
@@ -1510,6 +1513,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   character: {fileID: 0}
+  player: {fileID: 0}
+  enemy: {fileID: 0}
   health: 0
   maxHealth: 10
   dead: 0

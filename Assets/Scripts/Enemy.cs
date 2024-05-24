@@ -8,7 +8,7 @@ public class Enemy : Character
 
     protected void FixedUpdate()
     {
-        if (DistanceToPlayer() <= atqRange && !Life.dead) isFightingPlayer = true;
+        if (DistanceToPlayer() <= atqRange) isFightingPlayer = true;
         else isFightingPlayer = false;
     }
     protected float DistanceToPlayer()

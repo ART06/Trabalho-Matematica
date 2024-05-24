@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     protected Player player;
     protected Enemy enemy;
     protected InputHandler inputhandler;
+    protected Character character;
 
     public bool isFighting;
     public bool firstEncounter;
@@ -70,7 +71,7 @@ public class GameManager : MonoBehaviour
     }
     protected void CombatManager()
     {
-        if (!player.IsDead() && !enemy.IsDead() && enemy.isFightingPlayer)
+        if (enemy.isFightingPlayer)
         {
             calcPanel.SetActive(true);
             lifePanel.SetActive(true);

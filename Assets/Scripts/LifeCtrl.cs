@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class LifeCtrl : MonoBehaviour
 {
     [HideInInspector] public Character character;
+    [HideInInspector] public Player player;
+    [HideInInspector] public Enemy enemy;
     public int health;
     public int maxHealth;
     public bool dead;
@@ -14,6 +16,8 @@ public class LifeCtrl : MonoBehaviour
     protected virtual void Awake()
     {
         character = GetComponent<Character>();
+        enemy = GetComponent<Enemy>();
+        player = GetComponent<Player>();
         health = maxHealth;
     }
     public virtual void Start()

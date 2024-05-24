@@ -4,13 +4,6 @@ using UnityEngine;
 
 public class EnemyLifeCtrl : LifeCtrl
 {
-    protected Enemy enemy;
-
-    public override void Start()
-    {
-        base.Start();
-        enemy = GetComponent<Enemy>();
-    }
     public override void Die()
     {
         base.Die();

@@ -32,7 +32,6 @@ public class Character : MonoBehaviour
     protected virtual void Update()
     {
         Animations();
-        //DealDmg();
     }
     public virtual void TakeDmg(int _value)
     {

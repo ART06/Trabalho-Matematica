@@ -151,7 +151,7 @@ public class GameManager : MonoBehaviour
     CalcType RandomOperator()
     {
         System.Array _operators = System.Enum.GetValues(typeof(CalcType));
-        System.Random _random = new (); //() = System.Random() (serve só para evitar redundância)
+        System.Random _random = new(); //() = System.Random() (serve só para evitar redundância)
         CalcType _randomOperator = (CalcType)_operators.GetValue(_random.Next(_operators.Length));
         return _randomOperator;
     }

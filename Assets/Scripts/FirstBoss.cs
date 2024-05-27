@@ -19,5 +19,6 @@ public class FirstBoss : Enemy
     {
         base.Death();
         firstBossClear = true;
+        isFightingPlayer = false;
     }
 }

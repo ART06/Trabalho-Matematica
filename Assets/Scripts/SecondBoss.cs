@@ -18,5 +18,6 @@ public class SecondBoss : Enemy
     {
         base.Death();
         secondBossClear = true;
+        isFightingPlayer = false;
     }
 }

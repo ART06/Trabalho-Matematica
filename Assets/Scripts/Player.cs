@@ -16,7 +16,7 @@ public class Player : Character
     {
         canMove = true;
     }
-    protected override void Update()
+    public override void Update()
     {
         base.Update();
         Flip();

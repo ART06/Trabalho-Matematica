@@ -16,6 +16,9 @@ public class GameManager : MonoBehaviour
     protected Enemy enemy;
     protected InputHandler inputhandler;
     protected Character character;
+    protected FirstBoss firstBoss;
+    protected SecondBoss secondBoss;
+    protected ThirdBoss thirdBoss;
 
     public bool isFighting;
     public bool firstEncounter;
@@ -32,6 +35,9 @@ public class GameManager : MonoBehaviour
     public GameObject lifePanel;
     public GameObject questionPanel;
     public GameObject deathPanel;
+    public GameObject fb;
+    public GameObject sb;
+    public GameObject tb;
     public TextMeshProUGUI questionText;
     public TextMeshProUGUI asnwerVerifyText;
 
@@ -50,10 +56,15 @@ public class GameManager : MonoBehaviour
         calcPanel.SetActive(false);
         lifePanel.SetActive(false);
         deathPanel.SetActive(false);
+        sb.SetActive(false);
+        tb.SetActive(false);
         asnwerVerifyText.gameObject.SetActive(false);
         player = FindObjectOfType<Player>();
         enemy = FindObjectOfType<Enemy>();
         inputhandler = GetComponent<InputHandler>();
+        firstBoss = GetComponent<FirstBoss>();
+        secondBoss = GetComponent<SecondBoss>();
+        thirdBoss = GetComponent<ThirdBoss>();
 
         if (player == null)
         {
@@ -67,6 +78,7 @@ public class GameManager : MonoBehaviour
     private void FixedUpdate()
     {
         CombatManager();
+        ActiveObjects();
         inputhandler.ValidateInput();
     }
     protected void CombatManager()
@@ -94,6 +106,7 @@ public class GameManager : MonoBehaviour
             lifePanel.SetActive(false);
             enemy.isFightingPlayer = false;
             questionGenerated = false;
+            player.canMove = true;
         }
     }
     public void RegenerateAnswer()
@@ -151,5 +164,10 @@ public class GameManager : MonoBehaviour
         questionPanel.SetActive(true);
         inputhandler.playerDealDmg = false;
         inputhandler.monsterDealDmg = false;
+    }
+    protected void ActiveObjects()
+    {
+        if (firstBoss != null && firstBoss.firstBossClear == true) sb.SetActive(true);
+        if (secondBoss != null && secondBoss.secondBossClear == true) tb.SetActive(true);
     }
 }

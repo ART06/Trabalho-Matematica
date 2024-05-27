@@ -16,8 +16,8 @@ public class LifeCtrl : MonoBehaviour
     protected virtual void Awake()
     {
         character = GetComponent<Character>();
-        enemy = GetComponent<Enemy>();
-        player = GetComponent<Player>();
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        enemy = GameObject.FindGameObjectWithTag("Enemy").GetComponent<Enemy>();
         health = maxHealth;
     }
     public virtual void Start()

@@ -29,7 +29,7 @@ public class Character : MonoBehaviour
         Life = GetComponent<LifeCtrl>();
         CauseDmg = GetComponent<CauseDmg>();
     }
-    protected virtual void Update()
+    public virtual void Update()
     {
         Animations();
     }

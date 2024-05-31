@@ -479,6 +479,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   calcType: 0
+  fb: {fileID: 0}
+  sb: {fileID: 0}
+  tb: {fileID: 0}
   isFighting: 0
   firstEncounter: 0
   questionGenerated: 0
@@ -490,9 +493,9 @@ MonoBehaviour:
   lifePanel: {fileID: 179410627}
   questionPanel: {fileID: 286753464}
   deathPanel: {fileID: 1805610606}
-  fb: {fileID: 936485657}
-  sb: {fileID: 1764927747}
-  tb: {fileID: 558991114}
+  firstBoss: {fileID: 936485657}
+  secondBoss: {fileID: 1764927747}
+  thirdBoss: {fileID: 558991114}
   questionText: {fileID: 327626804}
   asnwerVerifyText: {fileID: 274026356}
 --- !u!114 &223760639
@@ -1138,6 +1141,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecf169928aea70b47967994de245b0da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Life: {fileID: 0}
   rb: {fileID: 0}
   atqPos: {fileID: 333640919}
   attackLayer:
@@ -1147,8 +1151,7 @@ MonoBehaviour:
   atqRange: 2.54
   receivingDmg: 0
   anim: {fileID: 21549856}
-  isFightingPlayer: 0
-  thirdBossClear: 0
+  thirdBoss: 0
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -1414,6 +1417,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f2a7ce3e4d5fe54184333cd10c78cfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Life: {fileID: 0}
   rb: {fileID: 0}
   atqPos: {fileID: 1201443189}
   attackLayer:
@@ -1813,6 +1817,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b4dae5c3e690194a8e4f0429e90232f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Life: {fileID: 0}
   rb: {fileID: 0}
   atqPos: {fileID: 71498470}
   attackLayer:
@@ -1822,8 +1827,7 @@ MonoBehaviour:
   atqRange: 2.54
   receivingDmg: 0
   anim: {fileID: 2110310915}
-  isFightingPlayer: 0
-  firstBossClear: 0
+  firstBoss: 0
 --- !u!1 &1030504345
 GameObject:
   m_ObjectHideFlags: 0
@@ -2773,6 +2777,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06689df37bf38fe478c985d00c2e87c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Life: {fileID: 0}
   rb: {fileID: 0}
   atqPos: {fileID: 65141075}
   attackLayer:
@@ -2782,8 +2787,7 @@ MonoBehaviour:
   atqRange: 2.54
   receivingDmg: 0
   anim: {fileID: 1156979449}
-  isFightingPlayer: 0
-  secondBossClear: 0
+  secondBoss: 0
 --- !u!1 &1805610606
 GameObject:
   m_ObjectHideFlags: 0

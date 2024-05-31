@@ -6,7 +6,7 @@ public class Character : MonoBehaviour
 {
     protected Player player;
     protected Enemy enemy;
-    protected LifeCtrl Life;
+    [HideInInspector] public LifeCtrl Life;
     protected InputHandler inputHandler;
 
     [HideInInspector] public Rigidbody2D rb;

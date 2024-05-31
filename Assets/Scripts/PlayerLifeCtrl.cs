@@ -21,7 +21,6 @@ public class PlayerLifeCtrl : LifeCtrl
     {
         base.Die();
         GameManager.instance.deathPanel.SetActive(true);
-        enemy.isFightingPlayer = false;
         character.rb.constraints = RigidbodyConstraints2D.FreezePositionX;
         character.rb.constraints = RigidbodyConstraints2D.FreezeRotation;
     }

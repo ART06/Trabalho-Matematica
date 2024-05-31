@@ -4,20 +4,21 @@ using UnityEngine;
 
 public class ThirdBoss : Enemy
 {
-    public bool thirdBossClear;
+    public bool thirdBoss;
 
-    protected void Start()
+    private void Start()
     {
-        thirdBossClear = false;
+        thirdBoss = true;
     }
     protected void FixedUpdate()
     {
-        if (DistanceToPlayer() <= atqRange && !thirdBossClear) isFightingPlayer = true;
+        if (DistanceToPlayer() <= atqRange && thirdBoss) GameManager.instance.isFighting = true;
     }
+
     public override void Death()
     {
         base.Death();
-        thirdBossClear = true;
-        isFightingPlayer = false;
+        thirdBoss = false;
+        GameManager.instance.OnBossDeath(this);
     }
 }

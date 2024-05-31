@@ -17,7 +17,7 @@ public class LifeCtrl : MonoBehaviour
     {
         character = GetComponent<Character>();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-        enemy = GameObject.FindGameObjectWithTag("Enemy").GetComponent<Enemy>();
+        enemy = GetComponent<Enemy>();
         health = maxHealth;
     }
     public virtual void Start()

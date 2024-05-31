@@ -18,10 +18,32 @@ public class InputHandler : MonoBehaviour
     protected void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-        enemy = GameObject.FindGameObjectWithTag("Enemy").GetComponent<Enemy>();
+        UpdateCurrentEnemy();
         monsterDealDmg = false;
         playerDealDmg = false;
     }
+
+    // Atualiza o inimigo atual em combate
+    public void UpdateCurrentEnemy()
+    {
+        enemy = FindCurrentEnemy();
+    }
+
+    // Método para encontrar o inimigo atual em combate
+    private Enemy FindCurrentEnemy()
+    {
+        // Encontra todos os inimigos ativos e retorna o primeiro encontrado
+        Enemy[] enemies = FindObjectsOfType<Enemy>();
+        foreach (var e in enemies)
+        {
+            if (e.gameObject.activeInHierarchy)
+            {
+                return e;
+            }
+        }
+        return null;
+    }
+
     public void ValidateInput()
     {
         string input = inputField.text;
@@ -37,15 +59,20 @@ public class InputHandler : MonoBehaviour
                 player.anim.SetTrigger("NormalAttack");
                 resultText.text = "Resposta certa!";
                 resultText.color = Color.green;
+
                 GameManager.instance.questionGenerated = false;
                 GameManager.instance.RegenerateAnswer();
             }
             else if (!isCorrect && !monsterDealDmg)
             {
                 monsterDealDmg = true;
-                enemy.anim.SetTrigger("Attack");
+                if (enemy != null)
+                {
+                    enemy.anim.SetTrigger("Attack");
+                }
                 resultText.text = "Resposta errada!";
                 resultText.color = Color.red;
+
                 GameManager.instance.questionGenerated = false;
                 GameManager.instance.RegenerateAnswer();
             }

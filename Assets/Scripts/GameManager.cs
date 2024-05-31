@@ -1,10 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.UI;
-using UnityEditor;
 using UnityEngine;
 using TMPro;
-using UnityEngine.VFX;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,9 +13,9 @@ public class GameManager : MonoBehaviour
     protected Enemy enemy;
     protected InputHandler inputhandler;
     protected Character character;
-    protected FirstBoss firstBoss;
-    protected SecondBoss secondBoss;
-    protected ThirdBoss thirdBoss;
+    [HideInInspector] public FirstBoss fb;
+    [HideInInspector] public SecondBoss sb;
+    [HideInInspector] public ThirdBoss tb;
 
     public bool isFighting;
     public bool firstEncounter;
@@ -35,11 +32,13 @@ public class GameManager : MonoBehaviour
     public GameObject lifePanel;
     public GameObject questionPanel;
     public GameObject deathPanel;
-    public GameObject fb;
-    public GameObject sb;
-    public GameObject tb;
+    public GameObject firstBoss;
+    public GameObject secondBoss;
+    public GameObject thirdBoss;
     public TextMeshProUGUI questionText;
     public TextMeshProUGUI asnwerVerifyText;
+
+    private bool isTransitioning;
 
     public void Awake()
     {
@@ -53,121 +52,141 @@ public class GameManager : MonoBehaviour
     protected void Start()
     {
         firstEncounter = false;
-        calcPanel.SetActive(false);
-        lifePanel.SetActive(false);
-        deathPanel.SetActive(false);
-        sb.SetActive(false);
-        tb.SetActive(false);
-        asnwerVerifyText.gameObject.SetActive(false);
-        player = FindObjectOfType<Player>();
-        enemy = FindObjectOfType<Enemy>();
-        inputhandler = GetComponent<InputHandler>();
-        firstBoss = GetComponent<FirstBoss>();
-        secondBoss = GetComponent<SecondBoss>();
-        thirdBoss = GetComponent<ThirdBoss>();
+        if (calcPanel != null) calcPanel.SetActive(false);
+        if (lifePanel != null) lifePanel.SetActive(false);
+        if (deathPanel != null) deathPanel.SetActive(false);
+        if (secondBoss != null) secondBoss.SetActive(false);
+        if (thirdBoss != null) thirdBoss.SetActive(false);
+        if (asnwerVerifyText != null) asnwerVerifyText.gameObject.SetActive(false);
 
-        if (player == null)
-        {
-            Debug.LogError("Player não encontrado na cena");
-        }
-        if (enemy == null)
-        {
-            Debug.LogError("Enemy não encontrado na cena");
-        }
+        player = FindObjectOfType<Player>();
+        inputhandler = GetComponent<InputHandler>();
+        fb = FindObjectOfType<FirstBoss>();
+        sb = FindObjectOfType<SecondBoss>();
+        tb = FindObjectOfType<ThirdBoss>();
     }
+
     private void FixedUpdate()
     {
         CombatManager();
-        ActiveObjects();
-        inputhandler.ValidateInput();
+        if (inputhandler != null) inputhandler.ValidateInput();
+        Debug.Log($"Está em luta?: {isFighting}");
     }
+
     protected void CombatManager()
     {
-        if (enemy.isFightingPlayer)
+        if (isFighting)
         {
-            calcPanel.SetActive(true);
-            lifePanel.SetActive(true);
+            if (calcPanel != null) calcPanel.SetActive(true);
+            if (lifePanel != null) lifePanel.SetActive(true);
 
             if (!questionGenerated && !firstEncounter)
             {
                 calcType = RandomOperator();
                 RandomCalculator();
                 questionGenerated = true;
-                Debug.Log(answer);
                 firstEncounter = true;
             }
+            Debug.Log($"Resposta gerada: {answer}");
             player.canMove = false;
         }
-        else if (calcPanel != null)
+        else
         {
+            isTransitioning = true;
             inputhandler.inputField.text = "";
-            asnwerVerifyText.gameObject.SetActive(false);
-            calcPanel.SetActive(false);
-            lifePanel.SetActive(false);
-            enemy.isFightingPlayer = false;
             questionGenerated = false;
-            player.canMove = true;
+            firstEncounter = false;
         }
+        if (player.IsDead() == true) calcPanel.SetActive(false);
     }
+
     public void RegenerateAnswer()
     {
-        if (player.IsDead() == true) return;
         Invoke(nameof(ActivatePanel), 2f);
         calcType = RandomOperator();
         RandomCalculator();
         questionGenerated = true;
         inputhandler.inputField.text = "";
-        Debug.Log(answer);
     }
+
     protected void RandomCalculator()
     {
-        operatorSymbol = operators[Random.Range(0, operators.Length)].ToString();
+        operatorSymbol = operators[UnityEngine.Random.Range(0, operators.Length)].ToString();
 
-        firstNumber = Random.Range(1, 100);
-        secondNumber = Random.Range(1, 10);
+        firstNumber = UnityEngine.Random.Range(1, 100);
+        secondNumber = UnityEngine.Random.Range(1, 10);
         switch (calcType)
         {
             case CalcType.Plus:
                 answer = firstNumber + secondNumber;
-                questionText.text = firstNumber + " + " + secondNumber + " = ?";
+                questionText.text = $"{firstNumber} + {secondNumber} = ?";
                 break;
 
             case CalcType.Minus:
                 answer = firstNumber - secondNumber;
-                questionText.text = firstNumber + " - " + secondNumber + " = ?";
+                questionText.text = $"{firstNumber} - {secondNumber} = ?";
                 break;
 
             case CalcType.Multi:
                 answer = firstNumber * secondNumber;
-                questionText.text = firstNumber + " * " + secondNumber + " = ?";
+                questionText.text = $"{firstNumber} * {secondNumber} = ?";
                 break;
 
             case CalcType.Division:
-                answer = Mathf.Round(firstNumber / secondNumber);
-                questionText.text = firstNumber + " : " + secondNumber + " = ?";
+                answer = Mathf.Round(firstNumber / (float)secondNumber);
+                questionText.text = $"{firstNumber} : {secondNumber} = ?";
                 break;
         }
     }
+
     CalcType RandomOperator()
     {
         System.Array _operators = System.Enum.GetValues(typeof(CalcType));
-        System.Random _random = new(); //() = System.Random() (serve só para evitar redundância)
-        CalcType _randomOperator = (CalcType)_operators.GetValue(_random.Next(_operators.Length));
-        return _randomOperator;
+        System.Random _random = new();
+        return (CalcType)_operators.GetValue(_random.Next(_operators.Length));
     }
+
     public bool CheckAnswer(float playerAnswer)
     {
         return Mathf.Approximately(answer, playerAnswer);
     }
+
     private void ActivatePanel()
     {
-        questionPanel.SetActive(true);
-        inputhandler.playerDealDmg = false;
-        inputhandler.monsterDealDmg = false;
+        if (questionPanel != null)
+        {
+            questionPanel.SetActive(true);
+        }
+
+        if (inputhandler != null)
+        {
+            inputhandler.playerDealDmg = false;
+            inputhandler.monsterDealDmg = false;
+        }
     }
-    protected void ActiveObjects()
+
+    public void OnBossDeath(Enemy boss)
     {
-        if (firstBoss != null && firstBoss.firstBossClear == true) sb.SetActive(true);
-        if (secondBoss != null && secondBoss.secondBossClear == true) tb.SetActive(true);
+        isFighting = false;
+        player.canMove = true;
+        if (calcPanel != null) calcPanel.SetActive(false);
+        if (lifePanel != null) lifePanel.SetActive(false);
+
+        // Atualiza o inimigo atual após a morte do chefe
+        inputhandler.UpdateCurrentEnemy();
+
+        if (boss is FirstBoss) StartCoroutine(ActivateNextBoss(secondBoss));
+        else if (boss is SecondBoss) StartCoroutine(ActivateNextBoss(thirdBoss));
+    }
+
+    private IEnumerator ActivateNextBoss(GameObject nextBoss)
+    {
+        yield return new WaitForSeconds(1f); // Ajuste o tempo conforme necessário
+        if (nextBoss != null)
+        {
+            nextBoss.SetActive(true);
+            // Atualiza o inimigo atual após ativar o próximo chefe
+            inputhandler.UpdateCurrentEnemy();
+        }
     }
 }

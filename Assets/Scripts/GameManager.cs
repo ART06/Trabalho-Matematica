@@ -2,32 +2,46 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    [HideInInspector] public enum CalcType { Plus, Minus, Multi, Division };
+    // Enums
+    [HideInInspector]
+    public enum CalcType { Plus, Minus, Multi, Division }
     public CalcType calcType;
 
+    // Singleton instance
     public static GameManager instance;
+
+    [Header("Player and Enemy References")]
     protected Player player;
     protected Enemy enemy;
     protected InputHandler inputhandler;
     protected Character character;
+
+    [Header("Boss References")]
     [HideInInspector] public FirstBoss fb;
     [HideInInspector] public SecondBoss sb;
     [HideInInspector] public ThirdBoss tb;
 
+    [Header("Game State Variables")]
     public bool isFighting;
     public bool firstEncounter;
     [HideInInspector] public bool questionGenerated = false;
 
+    [Header("Calculation Variables")]
     public string operators = "+-*/";
-    public string operatorSymbol;
-    int firstNumber;
-    int secondNumber;
+    protected string operatorSymbol;
+    protected string formatedAnswer;
+    protected int firstNumber;
+    protected int secondNumber;
+    public float remainTime;
+    public float maxTime;
     public float answer;
-    public string formatedAnswer;
 
+    [Header("UI Elements")]
+    public Image timerBar;
     public GameObject calcPanel;
     public GameObject lifePanel;
     public GameObject questionPanel;
@@ -38,8 +52,9 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI questionText;
     public TextMeshProUGUI asnwerVerifyText;
 
-    private bool isTransitioning;
+    protected bool isTransitioning;
 
+    #region Unity Methods
     public void Awake()
     {
         if (instance == null)
@@ -51,40 +66,51 @@ public class GameManager : MonoBehaviour
 
     protected void Start()
     {
+        remainTime = maxTime;
         firstEncounter = false;
-        if (calcPanel != null) calcPanel.SetActive(false);
-        if (lifePanel != null) lifePanel.SetActive(false);
-        if (deathPanel != null) deathPanel.SetActive(false);
-        if (secondBoss != null) secondBoss.SetActive(false);
-        if (thirdBoss != null) thirdBoss.SetActive(false);
-        if (asnwerVerifyText != null) asnwerVerifyText.gameObject.SetActive(false);
+
+        InitializeUIElements();
 
         player = FindObjectOfType<Player>();
         inputhandler = GetComponent<InputHandler>();
         fb = FindObjectOfType<FirstBoss>();
         sb = FindObjectOfType<SecondBoss>();
         tb = FindObjectOfType<ThirdBoss>();
+
+        inputhandler.UpdateCurrentEnemy();
     }
 
+    private void InitializeUIElements()
+    {
+        if (calcPanel != null) calcPanel.SetActive(false);
+        if (lifePanel != null) lifePanel.SetActive(false);
+        if (deathPanel != null) deathPanel.SetActive(false);
+        if (secondBoss != null) secondBoss.SetActive(false);
+        if (thirdBoss != null) thirdBoss.SetActive(false);
+        if (asnwerVerifyText != null) asnwerVerifyText.gameObject.SetActive(false);
+    }
     private void FixedUpdate()
     {
-        CombatManager();
+        if (isFighting)
+        {
+            CombatManager();
+            if (questionGenerated) CalcTimer();
+        }
         if (inputhandler != null) inputhandler.ValidateInput();
         Debug.Log($"Está em luta?: {isFighting}");
     }
+    #endregion
 
+    #region Combat Management
     protected void CombatManager()
     {
         if (isFighting)
         {
-            if (calcPanel != null) calcPanel.SetActive(true);
-            if (lifePanel != null) lifePanel.SetActive(true);
+            ActivateCombatUI();
 
             if (!questionGenerated && !firstEncounter)
             {
-                calcType = RandomOperator();
-                RandomCalculator();
-                questionGenerated = true;
+                GenerateQuestion();
                 firstEncounter = true;
             }
             Debug.Log($"Resposta gerada: {answer}");
@@ -92,14 +118,44 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            isTransitioning = true;
-            inputhandler.inputField.text = "";
-            questionGenerated = false;
-            firstEncounter = false;
+            ResetCombatState();
         }
         if (player.IsDead() == true) calcPanel.SetActive(false);
+
     }
 
+    private void ActivateCombatUI()
+    {
+        if (calcPanel != null) calcPanel.SetActive(true);
+        if (lifePanel != null) lifePanel.SetActive(true);
+    }
+
+    private void GenerateQuestion()
+    {
+        calcType = RandomOperator();
+        RandomCalculator();
+        questionGenerated = true;
+    }
+
+    private void ResetCombatState()
+    {
+        remainTime = maxTime;
+        isTransitioning = true;
+        inputhandler.inputField.text = "";
+        questionGenerated = false;
+        firstEncounter = false;
+    }
+    #endregion
+
+    #region Timer Management
+    public void CalcTimer()
+    {
+        remainTime -= Time.deltaTime;
+        timerBar.fillAmount = remainTime / maxTime;
+    }
+    #endregion
+
+    #region Calculation Management
     public void RegenerateAnswer()
     {
         Invoke(nameof(ActivatePanel), 2f);
@@ -115,6 +171,7 @@ public class GameManager : MonoBehaviour
 
         firstNumber = UnityEngine.Random.Range(1, 100);
         secondNumber = UnityEngine.Random.Range(1, 10);
+
         switch (calcType)
         {
             case CalcType.Plus:
@@ -153,26 +210,25 @@ public class GameManager : MonoBehaviour
 
     private void ActivatePanel()
     {
-        if (questionPanel != null)
-        {
-            questionPanel.SetActive(true);
-        }
-
+        remainTime = maxTime;
+        if (questionPanel != null) questionPanel.SetActive(true);
         if (inputhandler != null)
         {
             inputhandler.playerDealDmg = false;
             inputhandler.monsterDealDmg = false;
         }
     }
+    #endregion
 
+    #region Boss Management
     public void OnBossDeath(Enemy boss)
     {
+        maxTime += 3;
         isFighting = false;
         player.canMove = true;
         if (calcPanel != null) calcPanel.SetActive(false);
         if (lifePanel != null) lifePanel.SetActive(false);
 
-        // Atualiza o inimigo atual após a morte do chefe
         inputhandler.UpdateCurrentEnemy();
 
         if (boss is FirstBoss) StartCoroutine(ActivateNextBoss(secondBoss));
@@ -181,12 +237,12 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator ActivateNextBoss(GameObject nextBoss)
     {
-        yield return new WaitForSeconds(1f); // Ajuste o tempo conforme necessário
+        yield return new WaitForSeconds(1f);
         if (nextBoss != null)
         {
             nextBoss.SetActive(true);
-            // Atualiza o inimigo atual após ativar o próximo chefe
             inputhandler.UpdateCurrentEnemy();
         }
     }
+    #endregion
 }

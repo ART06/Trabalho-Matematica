@@ -7,14 +7,20 @@ using Unity.VisualScripting;
 
 public class InputHandler : MonoBehaviour
 {
+    #region Variables
+    [Header("UI Elements")]
     public InputField inputField;
     public TextMeshProUGUI resultText;
+
+    [Header("Damage Flags")]
     public bool monsterDealDmg;
     public bool playerDealDmg;
 
     protected Player player;
     protected Enemy enemy;
+    #endregion
 
+    #region Unity Methods
     protected void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
@@ -22,17 +28,15 @@ public class InputHandler : MonoBehaviour
         monsterDealDmg = false;
         playerDealDmg = false;
     }
+    #endregion
 
-    // Atualiza o inimigo atual em combate
+    #region Enemy Management
     public void UpdateCurrentEnemy()
     {
         enemy = FindCurrentEnemy();
     }
-
-    // Método para encontrar o inimigo atual em combate
-    private Enemy FindCurrentEnemy()
+    public Enemy FindCurrentEnemy()
     {
-        // Encontra todos os inimigos ativos e retorna o primeiro encontrado
         Enemy[] enemies = FindObjectsOfType<Enemy>();
         foreach (var e in enemies)
         {
@@ -43,12 +47,14 @@ public class InputHandler : MonoBehaviour
         }
         return null;
     }
+    #endregion
 
+    #region Input Validation
     public void ValidateInput()
     {
         string input = inputField.text;
 
-        if (float.TryParse(input, out float playerAnswer) && GameManager.instance.asnwerVerifyText.IsActive())
+        if (float.TryParse(input, out float playerAnswer) && GameManager.instance.asnwerVerifyText.IsActive() || GameManager.instance.remainTime < 0)
         {
             GameManager.instance.questionPanel.SetActive(false);
             Invoke(nameof(DeactivateText), 2.0f);
@@ -56,25 +62,32 @@ public class InputHandler : MonoBehaviour
             if (isCorrect && !playerDealDmg)
             {
                 playerDealDmg = true;
-                player.anim.SetTrigger("NormalAttack");
+                if (GameManager.instance.remainTime > GameManager.instance.maxTime / 2)
+                {
+                    player.anim.SetTrigger("SpecialAttack");
+                    StartCoroutine(nameof(PlayerDoubleDmg));
+                }
+                    player.anim.SetTrigger("NormalAttack");
                 resultText.text = "Resposta certa!";
                 resultText.color = Color.green;
 
                 GameManager.instance.questionGenerated = false;
                 GameManager.instance.RegenerateAnswer();
             }
-            else if (!isCorrect && !monsterDealDmg)
+            else if (!isCorrect && !monsterDealDmg || GameManager.instance.remainTime < 0 && !monsterDealDmg)
             {
                 monsterDealDmg = true;
-                if (enemy != null)
-                {
-                    enemy.anim.SetTrigger("Attack");
-                }
-                resultText.text = "Resposta errada!";
+                if (enemy != null) enemy.anim.SetTrigger("Attack");
                 resultText.color = Color.red;
-
                 GameManager.instance.questionGenerated = false;
                 GameManager.instance.RegenerateAnswer();
+
+                if (GameManager.instance.remainTime < 0)
+                {
+                    StartCoroutine(nameof(EnemyDoubleDmg));
+                    resultText.text = "Acabou o tempo!";
+                }
+                else if (!isCorrect) resultText.text = "Resposta errada!";
             }
         }
         else if (!playerDealDmg && !monsterDealDmg)
@@ -89,4 +102,17 @@ public class InputHandler : MonoBehaviour
     {
         resultText.gameObject.SetActive(false);
     }
+    public IEnumerator EnemyDoubleDmg()
+    {
+        enemy.atqDmg *= 2;
+        yield return new WaitForSeconds(2);
+        enemy.atqDmg /= 2;
+    }
+    public IEnumerator PlayerDoubleDmg()
+    {
+        player.atqDmg *= 2;
+        yield return new WaitForSeconds(2);
+        player.atqDmg /= 2;
+    }
+    #endregion
 }

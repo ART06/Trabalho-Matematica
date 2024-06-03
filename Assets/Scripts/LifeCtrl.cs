@@ -11,7 +11,6 @@ public class LifeCtrl : MonoBehaviour
     public int health;
     public int maxHealth;
     public bool dead;
-    public Image healthBar;
 
     protected virtual void Awake()
     {
@@ -32,10 +31,7 @@ public class LifeCtrl : MonoBehaviour
     public virtual void TakeDmg(int _dmg)
     {
         if (dead) return;
-
         health = Mathf.Max(health - _dmg, 0);
-        healthBar.fillAmount = (float)health / maxHealth;
-
         if (health == 0) Die();
     }
 }

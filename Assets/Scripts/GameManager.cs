@@ -223,7 +223,7 @@ public class GameManager : MonoBehaviour
     #region Boss Management
     public void OnBossDeath(Enemy boss)
     {
-        maxTime += 3;
+        maxTime += 2;
         isFighting = false;
         player.canMove = true;
         if (calcPanel != null) calcPanel.SetActive(false);

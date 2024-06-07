@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Unity.VisualScripting;
 
 public class InputHandler : MonoBehaviour
 {
-    #region Variables
     [Header("UI Elements")]
     public InputField inputField;
     public TextMeshProUGUI resultText;
@@ -18,9 +16,7 @@ public class InputHandler : MonoBehaviour
 
     protected Player player;
     protected Enemy enemy;
-    #endregion
 
-    #region Unity Methods
     protected void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
@@ -28,13 +24,12 @@ public class InputHandler : MonoBehaviour
         monsterDealDmg = false;
         playerDealDmg = false;
     }
-    #endregion
 
-    #region Enemy Management
     public void UpdateCurrentEnemy()
     {
         enemy = FindCurrentEnemy();
     }
+
     public Enemy FindCurrentEnemy()
     {
         Enemy[] enemies = FindObjectsOfType<Enemy>();
@@ -47,15 +42,19 @@ public class InputHandler : MonoBehaviour
         }
         return null;
     }
-    #endregion
 
-    #region Input Validation
+    public Enemy GetCurrentEnemy()
+    {
+        return enemy;
+    }
+
     public void ValidateInput()
     {
         string input = inputField.text;
 
-        if (float.TryParse(input, out float playerAnswer) && GameManager.instance.asnwerVerifyText.IsActive() || GameManager.instance.remainTime < 0)
+        if (float.TryParse(input, out float playerAnswer) && (GameManager.instance.asnwerVerifyText.IsActive() || GameManager.instance.remainTime < 0))
         {
+            GameManager.instance.remainTime = GameManager.instance.maxTime;
             GameManager.instance.questionPanel.SetActive(false);
             Invoke(nameof(DeactivateText), 2.0f);
             bool isCorrect = GameManager.instance.CheckAnswer(playerAnswer);
@@ -67,7 +66,7 @@ public class InputHandler : MonoBehaviour
                     player.anim.SetTrigger("SpecialAttack");
                     StartCoroutine(nameof(PlayerDoubleDmg));
                 }
-                    player.anim.SetTrigger("NormalAttack");
+                player.anim.SetTrigger("NormalAttack");
                 resultText.text = "Resposta certa!";
                 resultText.color = Color.green;
 
@@ -98,21 +97,23 @@ public class InputHandler : MonoBehaviour
             resultText.color = Color.gray;
         }
     }
+
     private void DeactivateText()
     {
         resultText.gameObject.SetActive(false);
     }
+
     public IEnumerator EnemyDoubleDmg()
     {
         enemy.atqDmg *= 2;
         yield return new WaitForSeconds(2);
         enemy.atqDmg /= 2;
     }
+
     public IEnumerator PlayerDoubleDmg()
     {
         player.atqDmg *= 2;
         yield return new WaitForSeconds(2);
         player.atqDmg /= 2;
     }
-    #endregion
 }

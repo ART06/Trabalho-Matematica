@@ -7,8 +7,6 @@ using TMPro;
 public class InputHandler : MonoBehaviour
 {
     [Header("UI Elements")]
-    public InputField inputField;
-    public TextMeshProUGUI resultText;
 
     [Header("Damage Flags")]
     public bool monsterDealDmg;
@@ -48,68 +46,32 @@ public class InputHandler : MonoBehaviour
         return enemy;
     }
 
-    public void ValidateInput()
+    public void ValidateInput(string buttonText)
     {
-        string input = inputField.text;
+        if (GameManager.instance.habilityPanel != null) GameManager.instance.questionPanel.SetActive(false);
+        if (GameManager.instance.habilityPanel != null) GameManager.instance.habilityPanel.SetActive(true);
 
-        if (float.TryParse(input, out float playerAnswer) && (GameManager.instance.asnwerVerifyText.IsActive() || GameManager.instance.remainTime < 0))
+        int _answer = int.Parse(buttonText);
+
+
+        if (_answer == GameManager.instance.skills.answer)
         {
-            GameManager.instance.remainTime = GameManager.instance.maxTime;
-            GameManager.instance.questionPanel.SetActive(false);
-            Invoke(nameof(DeactivateText), 2.0f);
-            bool isCorrect = GameManager.instance.CheckAnswer(playerAnswer);
-            if (isCorrect && !playerDealDmg)
+            playerDealDmg = true;
+            if (GameManager.instance.advancedSkill.isAdvanced)
             {
-                playerDealDmg = true;
-                if (GameManager.instance.remainTime > GameManager.instance.maxTime / 2)
-                {
-                    player.anim.SetTrigger("SpecialAttack");
-                    StartCoroutine(nameof(PlayerDoubleDmg));
-                }
-                player.anim.SetTrigger("NormalAttack");
-                resultText.text = "Resposta certa!";
-                resultText.color = Color.green;
-
-                GameManager.instance.questionGenerated = false;
-                GameManager.instance.RegenerateAnswer();
+                player.anim.SetTrigger("SpecialAttack");
+                StartCoroutine(nameof(PlayerDoubleDmg));
+                GameManager.instance.advancedSkill.isAdvanced = false;
             }
-            else if (!isCorrect && !monsterDealDmg || GameManager.instance.remainTime < 0 && !monsterDealDmg)
-            {
-                monsterDealDmg = true;
-                if (enemy != null) enemy.anim.SetTrigger("Attack");
-                resultText.color = Color.red;
-                GameManager.instance.questionGenerated = false;
-                GameManager.instance.RegenerateAnswer();
-
-                if (GameManager.instance.remainTime < 0)
-                {
-                    StartCoroutine(nameof(EnemyDoubleDmg));
-                    resultText.text = "Acabou o tempo!";
-                }
-                else if (!isCorrect) resultText.text = "Resposta errada!";
-            }
+            player.anim.SetTrigger("NormalAttack");
+            GameManager.instance.basicSkill.isBasic = false;
         }
-        else if (!playerDealDmg && !monsterDealDmg)
+        else
         {
-            playerDealDmg = false;
-            monsterDealDmg = false;
-            resultText.text = "Resposta inválida, tente novamente.";
-            resultText.color = Color.gray;
+            monsterDealDmg = true;
+            if (enemy != null) enemy.anim.SetTrigger("Attack");
         }
     }
-
-    private void DeactivateText()
-    {
-        resultText.gameObject.SetActive(false);
-    }
-
-    public IEnumerator EnemyDoubleDmg()
-    {
-        enemy.atqDmg *= 2;
-        yield return new WaitForSeconds(2);
-        enemy.atqDmg /= 2;
-    }
-
     public IEnumerator PlayerDoubleDmg()
     {
         player.atqDmg *= 2;

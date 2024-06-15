@@ -6,22 +6,19 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    // Enums
-    public CalcTypeMD calcTypeMD;
-    public CalcTypePM calcTypePM;
-    public CalcTypeSS calcTypeSS;
-    public enum CalcTypeMD { Multi, Division }
-    public enum CalcTypePM { Plus, Minus }
-    public enum CalcTypeSS { SqrRoot, Squared }
+    private int[] falseAnswer = new int[2];
 
-    // Singleton instance
     public static GameManager instance;
 
     [Header("Player and Enemy References")]
-    protected Player player;
+    [HideInInspector] public Player player;
     protected Enemy enemy;
     protected InputHandler inputhandler;
     protected Character character;
+    [HideInInspector] public Skills skills;
+    [HideInInspector] public BasicSkill basicSkill;
+    [HideInInspector] public HealSkill healSkill;
+    [HideInInspector] public AdvancedSkill advancedSkill;
 
     [Header("Boss References")]
     [HideInInspector] public FirstBoss fb;
@@ -30,36 +27,31 @@ public class GameManager : MonoBehaviour
 
     [Header("Game State Variables")]
     public bool isFighting;
-    public bool firstEncounter;
-    [HideInInspector] public bool questionGenerated = false;
-
-    [Header("Calculation Variables")]
-    protected int specialNumbers1;
-    protected int specialNumbers2;
-    protected int basicNumbers;
-    protected int squaredNumber;
-    protected int sqrRootNumber;
     public float remainTime;
     public float maxTime;
-    public float answer;
-    protected float preAnswer;
 
-    [Header("UI Elements")] 
+    [Header("UI Elements")]
     public Image timerBar;
-    public GameObject calcPanel;
-    public GameObject lifePanel;
     public GameObject questionPanel;
+    public GameObject battleUI;
+    public GameObject habilityPanel;
+    public GameObject lifePanel;
+    public GameObject battlePanel;
     public GameObject deathPanel;
     public GameObject firstBoss;
     public GameObject secondBoss;
     public GameObject thirdBoss;
     public TextMeshProUGUI questionText;
-    public TextMeshProUGUI asnwerVerifyText;
+    public Button button1;
+    public Button button2;
+    public Button button3;
+    public Text textButton1;
+    public Text textButton2;
+    public Text textButton3;
 
     protected bool isTransitioning;
 
-    #region Unity Methods
-    public void Awake()
+    private void Awake()
     {
         if (instance == null)
         {
@@ -68,31 +60,37 @@ public class GameManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
-    protected void Start()
+    private void Start()
     {
         remainTime = maxTime;
-        firstEncounter = false;
 
         InitializeUIElements();
 
         player = FindObjectOfType<Player>();
         inputhandler = GetComponent<InputHandler>();
+        skills = GetComponent<Skills>();
+        basicSkill = GetComponent<BasicSkill>();
+        healSkill = GetComponent<HealSkill>();
+        advancedSkill = GetComponent<AdvancedSkill>();
         fb = FindObjectOfType<FirstBoss>();
         sb = FindObjectOfType<SecondBoss>();
         tb = FindObjectOfType<ThirdBoss>();
 
         inputhandler.UpdateCurrentEnemy();
         enemy = inputhandler.GetCurrentEnemy();
+
+        button1.onClick.AddListener(() => inputhandler.ValidateInput(textButton1.text));
+        button2.onClick.AddListener(() => inputhandler.ValidateInput(textButton2.text));
+        button3.onClick.AddListener(() => inputhandler.ValidateInput(textButton3.text));
     }
 
     private void InitializeUIElements()
     {
-        if (calcPanel != null) calcPanel.SetActive(false);
-        if (lifePanel != null) lifePanel.SetActive(false);
+        if (questionPanel != null) questionPanel.SetActive(false);
+        if (battlePanel != null) battlePanel.SetActive(false);
         if (deathPanel != null) deathPanel.SetActive(false);
         if (secondBoss != null) secondBoss.SetActive(false);
         if (thirdBoss != null) thirdBoss.SetActive(false);
-        if (asnwerVerifyText != null) asnwerVerifyText.gameObject.SetActive(false);
     }
 
     private void FixedUpdate()
@@ -100,291 +98,101 @@ public class GameManager : MonoBehaviour
         if (isFighting)
         {
             CombatManager();
-            if (questionGenerated) CalcTimer();
+            if (questionPanel.activeSelf) CalcTimer();
         }
-        if (inputhandler != null) inputhandler.ValidateInput();
     }
-    #endregion
-
-    #region Combat Management
-    protected void CombatManager()
+    private void CombatManager()
     {
         if (isFighting)
         {
             ActivateCombatUI();
-
-            if (!questionGenerated && !firstEncounter)
-            {
-                GenerateQuestion();
-                firstEncounter = true;
-            }
             player.canMove = false;
         }
         else
         {
             ResetCombatState();
         }
-        if (player.IsDead() == true) calcPanel.SetActive(false);
-
+        if (player.IsDead() == true) questionPanel.SetActive(false);
     }
-
     private void ActivateCombatUI()
     {
-        if (calcPanel != null) calcPanel.SetActive(true);
-        if (lifePanel != null) lifePanel.SetActive(true);
+        if (battlePanel != null) battlePanel.SetActive(true);
+        if (battleUI != null) battleUI.SetActive(true);
     }
-
-    private void GenerateQuestion()
-    {
-        inputhandler.UpdateCurrentEnemy();
-        enemy = inputhandler.GetCurrentEnemy();
-
-        calcTypePM = RandomOperator1();
-        calcTypeMD = RandomOperator2();
-        calcTypeSS = RandomOperator3();
-        RandomCalculator();
-        questionGenerated = true;
-    }
-
     private void ResetCombatState()
     {
         remainTime = maxTime;
         isTransitioning = true;
-        inputhandler.inputField.text = "";
-        questionGenerated = false;
-        firstEncounter = false;
 
-        if (calcPanel != null) calcPanel.SetActive(false);
-        if (lifePanel != null) lifePanel.SetActive(false);
+        if (battlePanel != null) battlePanel.SetActive(false);
+        if (battleUI != null) battleUI.SetActive(false);
     }
-    #endregion
-
-    #region Timer Management
     public void CalcTimer()
     {
         remainTime -= Time.deltaTime;
         timerBar.fillAmount = remainTime / maxTime;
     }
-    #endregion
-
-    #region Calculation Management
-    public void RegenerateAnswer()
+    public void IncorrectNumberGenerator()
     {
-        Invoke(nameof(ActivatePanel), 2f);
-        calcTypePM = RandomOperator1();
-        calcTypeMD = RandomOperator2();
-        calcTypeSS = RandomOperator3();
-        RandomCalculator();
-        questionGenerated = true;
-        inputhandler.inputField.text = "";
-    }
-
-    protected void RandomCalculator()
-    {
-        specialNumbers1 = UnityEngine.Random.Range(1, 60);
-        specialNumbers2 = UnityEngine.Random.Range(1, 60);
-        basicNumbers = UnityEngine.Random.Range(1, 100);
-        sqrRootNumber = UnityEngine.Random.Range(1, 100);
-        squaredNumber = UnityEngine.Random.Range(1, 30);
-
-        string _question = "";
-
-        if (enemy is FirstBoss)
+        for (int i = 0; i < falseAnswer.Length; i++)
         {
-            switch (calcTypeMD)
+            int offset = Random.Range(1, 10);
+            if (Random.value > 0.5f)
             {
-                case CalcTypeMD.Multi:
-                    preAnswer = specialNumbers1 * specialNumbers2;
-                    _question += $"{specialNumbers1} * {specialNumbers2}";
-                    break;
+                falseAnswer[i] = skills.answer + offset;
+            }
+            else
+            {
+                falseAnswer[i] = skills.answer - offset;
+            }
 
-                case CalcTypeMD.Division:
-                    while (true)
-                    {
-                        if (specialNumbers1 % specialNumbers2 == 0)
-                        {
-                            preAnswer = specialNumbers1 / specialNumbers2;
-                            _question += $"{specialNumbers1} : {specialNumbers2}";
-                            break;
-                        }
-                    }
-                    break;
-            }
-            switch (calcTypePM)
+            if (falseAnswer[i] == skills.answer)
             {
-                case CalcTypePM.Plus:
-                    answer = preAnswer + basicNumbers;
-                    questionText.text = $"{_question} + {basicNumbers} = ?";
-                    break;
-
-                case CalcTypePM.Minus:
-                    answer = preAnswer - basicNumbers;
-                    questionText.text = $"{_question} - {basicNumbers} = ?";
-                    break;
-            }
-            
-        }
-        else if (enemy is SecondBoss)
-        {
-            specialNumbers1 = (int)Mathf.Pow(squaredNumber, 2);
-            _question += $"{squaredNumber}²";
-
-            switch (calcTypeMD)
-            {
-                case CalcTypeMD.Multi:
-                    preAnswer = specialNumbers1 * specialNumbers2;
-                    _question += $" * {specialNumbers2}";
-                    break;
-
-                case CalcTypeMD.Division:
-                    while (true)
-                    {
-                        if (specialNumbers1 % specialNumbers2 == 0)
-                        {
-                            preAnswer = specialNumbers1 / specialNumbers2;
-                            _question += $" : {specialNumbers2}";
-                            break;
-                        }
-                    }
-                    break;
-            }
-            switch (calcTypePM)
-            {
-                case CalcTypePM.Plus:
-                    answer = preAnswer + basicNumbers;
-                    questionText.text = $"{_question} + {basicNumbers} = ?";
-                    break;
-
-                case CalcTypePM.Minus:
-                    answer = preAnswer - basicNumbers;
-                    questionText.text = $"{_question} - {basicNumbers} = ?";
-                    break;
-            }
-        }
-        else if (enemy is ThirdBoss)
-        {
-            switch (calcTypeSS)
-            {
-                case CalcTypeSS.SqrRoot:
-                    while (true)
-                    {
-                        sqrRootNumber = (int)Mathf.Sqrt(sqrRootNumber);
-                        if (sqrRootNumber == Mathf.Floor(sqrRootNumber))
-                        {
-                            specialNumbers1 = sqrRootNumber;
-                            _question += $"√{sqrRootNumber}";
-                            break;
-                        }
-                    }
-                    break;
-
-                case CalcTypeSS.Squared:
-                    specialNumbers1 = (int)Mathf.Pow(squaredNumber, 2);
-                    _question += $"{squaredNumber}²";
-                    break;
-            }
-            switch (calcTypeMD)
-            {
-                case CalcTypeMD.Multi:
-                    _question += $" *";
-                    break;
-
-                case CalcTypeMD.Division:
-                    _question += $" :";
-                    break;
-            }
-            switch (calcTypeSS)
-            {
-                case CalcTypeSS.SqrRoot:
-                    while (true)
-                    {
-                        sqrRootNumber = (int)Mathf.Sqrt(sqrRootNumber);
-                        if (sqrRootNumber == Mathf.Floor(specialNumbers2))
-                        {
-                            specialNumbers2 = sqrRootNumber;
-                            _question += $" √{sqrRootNumber}";
-                            break;
-                        }
-                    }
-                    break;
-
-                case CalcTypeSS.Squared:
-                    specialNumbers2 = (int)Mathf.Pow(squaredNumber, 2);
-                    _question += $" {squaredNumber}²";
-                    break;
-            }
-            if (calcTypeMD == CalcTypeMD.Multi)
-            {
-                preAnswer = specialNumbers1 * specialNumbers2;
-                _question += $" {specialNumbers2}";
-            }
-            else if (calcTypeMD == CalcTypeMD.Division)
-            {
-                while (true)
-                {
-                    if (specialNumbers1 % specialNumbers2 == 0)
-                    {
-                        preAnswer = specialNumbers1 / specialNumbers2;
-                        _question += $" {specialNumbers2}";
-                        break;
-                    }
-                }
-            }
-            switch (calcTypePM)
-            {
-                case CalcTypePM.Plus:
-                    answer = preAnswer + basicNumbers;
-                    questionText.text = $"{_question} + {basicNumbers} = ?";
-                    break;
-                case CalcTypePM.Minus:
-                    answer = preAnswer - basicNumbers;
-                    questionText.text = $"{_question} - {basicNumbers} = ?";
-                    break;
+                falseAnswer[i] += offset;
             }
         }
     }
-    CalcTypePM RandomOperator1()
+    public void RightAnswerPos()
     {
-        System.Array _operators = System.Enum.GetValues(typeof(CalcTypePM));
-        System.Random _random = new();
-        return (CalcTypePM)_operators.GetValue(_random.Next(_operators.Length));
+        int rightPos = Random.Range(0, 3);
+        if (rightPos == 0)
+        {
+            textButton1.text = skills.answer.ToString();
+            textButton2.text = falseAnswer[0].ToString();
+            textButton3.text = falseAnswer[1].ToString();
+        }
+        else if (rightPos == 1)
+        {
+            textButton1.text = falseAnswer[0].ToString();
+            textButton2.text = skills.answer.ToString();
+            textButton3.text = falseAnswer[1].ToString();
+        }
+        else
+        {
+            textButton1.text = falseAnswer[0].ToString();
+            textButton2.text = falseAnswer[1].ToString();
+            textButton3.text = skills.answer.ToString();
+        }
     }
-    CalcTypeMD RandomOperator2()
-    {
-        System.Array _operators = System.Enum.GetValues(typeof(CalcTypeMD));
-        System.Random _random = new();
-        return (CalcTypeMD)_operators.GetValue(_random.Next(_operators.Length));
-    }
-    CalcTypeSS RandomOperator3()
-    {
-        System.Array _operators = System.Enum.GetValues(typeof(CalcTypeSS));
-        System.Random _random = new();
-        return (CalcTypeSS)_operators.GetValue(_random.Next(_operators.Length));
-    }
-    public bool CheckAnswer(float playerAnswer)
-    {
-        return Mathf.Approximately(answer, playerAnswer);
-    }
-
-    private void ActivatePanel()
+    public void ActivatePanel()
     {
         remainTime = maxTime;
-        if (questionPanel != null) questionPanel.SetActive(true);
+        if (battlePanel != null) battlePanel.SetActive(true);
         if (inputhandler != null)
         {
             inputhandler.playerDealDmg = false;
             inputhandler.monsterDealDmg = false;
         }
+        IncorrectNumberGenerator();
+        RightAnswerPos();
     }
-    #endregion
 
-    #region Boss Management
     public void OnBossDeath(Enemy boss)
     {
         maxTime += 2;
         isFighting = false;
         player.canMove = true;
-        if (calcPanel != null) calcPanel.SetActive(false);
+        if (questionPanel != null) questionPanel.SetActive(false);
         if (lifePanel != null) lifePanel.SetActive(false);
 
         inputhandler.UpdateCurrentEnemy();
@@ -402,5 +210,4 @@ public class GameManager : MonoBehaviour
             inputhandler.UpdateCurrentEnemy();
         }
     }
-    #endregion
 }

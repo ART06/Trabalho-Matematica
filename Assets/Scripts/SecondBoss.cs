@@ -12,7 +12,7 @@ public class SecondBoss : Enemy
     }
     protected void FixedUpdate()
     {
-        if (DistanceToPlayer() <= atqRange && secondBoss) GameManager.instance.isFighting = true;
+        //if (DistanceToPlayer() <= atqRange && secondBoss) GameManager.instance.isFighting = true;
     }
 
     public override void Death()

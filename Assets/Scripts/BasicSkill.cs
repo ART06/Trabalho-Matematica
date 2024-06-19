@@ -1,77 +1,76 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
-using static GameManager;
+using UnityEngine.UI;
 
 public class BasicSkill : Skills
 {
     public bool isBasic;
-
+    public Button basic;
     public override void ActivateSkill()
     {
         base.ActivateSkill();
-
-        switch (calcTypeMD)
+        bool calculationSuccessful;
+        isBasic = true;
+        do
         {
-            case CalcTypeMD.Multi:
-                preAnswer = specialNumbers1 * specialNumbers2;
-                question += $"{specialNumbers1} * {specialNumbers2}";
-                break;
-
-            case CalcTypeMD.Division:
-                // Certifique-se de que specialNumbers2 não seja zero para evitar divisão por zero
-                if (specialNumbers2 == 0)
-                {
-                    Debug.LogError("Divisão por zero evitada");
-                    return;
-                }
-
-                // Limite o número de iterações do loop para evitar loops infinitos
-
-                while (true)
-                {
-                    if (specialNumbers1 % specialNumbers2 == 0)
+            calculationSuccessful = true;
+            iterationCount = 0;
+            specialNumbers1 = Random.Range(5, 60);
+            specialNumbers2 = Random.Range(2, 20);
+            switch (calcTypeMD)
+            {
+                case CalcTypeMD.Multi:
+                    preAnswer = specialNumbers1 * specialNumbers2;
+                    question = $"{specialNumbers1} * {specialNumbers2}";
+                    break;
+                case CalcTypeMD.Division:
+                    while (true)
                     {
-                        preAnswer = specialNumbers1 / specialNumbers2;
-                        question += $"{specialNumbers1} : {specialNumbers2}";
-                        break;
+                        if (specialNumbers2 == 0)
+                        {
+                            Debug.Log("Divisão por zero evitada, tentando novamente...");
+                            calculationSuccessful = false;
+                            break;
+                        }
+                        if (specialNumbers1 % specialNumbers2 != 0)
+                        {
+                            Debug.Log("Divisão inexata, tentando novamente...");
+                            calculationSuccessful = false;
+                            break;
+                        }
+                        if (specialNumbers1 % specialNumbers2 == 0)
+                        {
+                            preAnswer = specialNumbers1 / specialNumbers2;
+                            question = $"{specialNumbers1} : {specialNumbers2}";
+                            break;
+                        }
+                        iterationCount++;
+                        if (iterationCount >= maxIterations)
+                        {
+                            Debug.Log("Loop infinito evitado, tentando novamente...");
+                            calculationSuccessful = false;
+                            break;
+                        }
+                        specialNumbers2 = Random.Range(2, 20);
                     }
-
-                    // Verifique se o número máximo de iterações foi atingido
-                    iterationCount++;
-                    if (iterationCount >= maxIterations)
-                    {
-                        Debug.LogError("Loop infinito evitado");
-                        return;
-                    }
-
-                    // Opcional: Modificar specialNumbers1 ou specialNumbers2 para tentar evitar loop infinito
-                    specialNumbers1 = Random.Range(1, 100); // Exemplo de ajuste
-                }
-                break;
-        }
-
+                    break;
+            }
+        } 
+        while (!calculationSuccessful);
         switch (calcTypePM)
         {
             case CalcTypePM.Plus:
-                answer = (int)preAnswer + basicNumbers;
+                answer = preAnswer + basicNumbers;
                 questionText.text = $"{question} + {basicNumbers} = ?";
                 break;
 
             case CalcTypePM.Minus:
-                answer = (int)preAnswer - basicNumbers;
+                answer = preAnswer - basicNumbers;
                 questionText.text = $"{question} - {basicNumbers} = ?";
                 break;
-        }
-
-        // Verifique se questionText não é nulo antes de usá-lo
-        if (questionText != null)
-        {
-            Debug.Log(questionText.text);
-        }
-        else
-        {
-            Debug.LogError("questionText é nulo");
         }
     }
 }

@@ -82,6 +82,8 @@ public class AdvancedSkill : Skills
             }
 
             calcTypeSS = RandomOperator3();
+            sqrRootNumber = Random.Range(4, 100);
+            squaredNumber = Random.Range(2, 20);
 
             switch (calcTypeSS)
             {

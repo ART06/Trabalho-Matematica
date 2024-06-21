@@ -12,7 +12,7 @@ public class EnemyLifeCtrl : LifeCtrl
     #region Unity Methods
     public void Update()
     {
-        enemyHealthBar.fillAmount = (float)health / maxHealth;
+        HealthBar();
     }
     #endregion
 
@@ -28,6 +28,11 @@ public class EnemyLifeCtrl : LifeCtrl
     {
         base.TakeDmg(_value);
         enemy.anim.SetTrigger("Hurt");
+    }
+    public void HealthBar()
+    {
+        enemyHealthBar.fillAmount = (float)health / maxHealth;
+        if (health <= 0) enemyHealthBar.fillAmount = 0;
     }
     #endregion
 

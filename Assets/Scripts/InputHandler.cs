@@ -52,10 +52,6 @@ public class InputHandler : MonoBehaviour
 
             GameManager.instance.OnTurnEnd();
         }
-        if (GameManager.instance.habilityPanel != null)
-        {
-            GameManager.instance.habilityPanel.SetActive(true);
-        }
 
         if (!int.TryParse(buttonText, out int _answer))
         {
@@ -65,26 +61,39 @@ public class InputHandler : MonoBehaviour
 
         if (_answer == GameManager.instance.skills.answer)
         {
-            playerDealDmg = true;
             if (GameManager.instance.advancedSkill != null && GameManager.instance.advancedSkill.isAdvanced)
             {
+                playerDealDmg = true;
                 player.anim.SetTrigger("SpecialAttack");
                 StartCoroutine(nameof(PlayerDoubleDmg));
                 GameManager.instance.advancedSkill.isAdvanced = false;
+                Invoke(nameof(ActiveHabPanel), 1f);
             }
             else if (GameManager.instance.basicSkill != null && GameManager.instance.basicSkill.isBasic)
             {
+                playerDealDmg = true;
                 player.anim.SetTrigger("NormalAttack");
                 GameManager.instance.basicSkill.isBasic = false;
+                Invoke(nameof(ActiveHabPanel), 1f);
+            }
+            else if (GameManager.instance.healSkill != null && GameManager.instance.healSkill.isHeal)
+            {
+                playerDealDmg = false;
+                GameManager.instance.healSkill.isHeal = false;
+                StartCoroutine(nameof(HealEvent));
             }
         }
-        else
+        else if (_answer != GameManager.instance.skills.answer)
         {
             monsterDealDmg = true;
             if (enemy != null)
             {
                 enemy.anim.SetTrigger("Attack");
+                Invoke(nameof(ActiveHabPanel), 1f);
             }
+            GameManager.instance.advancedSkill.isAdvanced = false;
+            GameManager.instance.basicSkill.isBasic = false;
+            GameManager.instance.healSkill.isHeal = false;
         }
     }
     public IEnumerator PlayerDoubleDmg()
@@ -92,5 +101,16 @@ public class InputHandler : MonoBehaviour
         player.atqDmg *= 2;
         yield return new WaitForSeconds(2);
         player.atqDmg /= 2;
+    }
+    public IEnumerator HealEvent()
+    {
+        player.healAnim.SetTrigger("Heal");
+        Invoke(nameof(ActiveHabPanel), 3f);
+        yield return new WaitForSeconds(1.5f);
+        player.Life.GetHeal(player.Life.healValue);
+    }
+    public void ActiveHabPanel()
+    {
+        GameManager.instance.habilityPanel.SetActive(true);
     }
 }

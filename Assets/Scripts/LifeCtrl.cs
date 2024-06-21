@@ -9,8 +9,10 @@ public class LifeCtrl : MonoBehaviour
     [HideInInspector] public Player player;
     [HideInInspector] public Enemy enemy;
     public int health;
+    public int healValue;
     public int maxHealth;
     public bool dead;
+    public bool canHeal;
 
     protected virtual void Awake()
     {
@@ -33,5 +35,10 @@ public class LifeCtrl : MonoBehaviour
         if (dead) return;
         health = Mathf.Max(health - _dmg, 0);
         if (health == 0) Die();
+    }
+    public virtual void GetHeal(int _heal)
+    {
+        if (!canHeal || dead) return;
+        health = Mathf.Min(health + _heal, maxHealth);
     }
 }

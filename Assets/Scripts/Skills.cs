@@ -6,6 +6,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEditor.Tilemaps;
 using UnityEngine;
 using UnityEngine.Purchasing;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 public class Skills : MonoBehaviour
@@ -55,7 +56,6 @@ public class Skills : MonoBehaviour
         calcTypeMD = RandomOperator2();
         calcTypeSS = RandomOperator3();
         GameManager.instance.RightAnswerPos();
-
         rightPos = Random.Range(0, 3);
     }
 
@@ -81,6 +81,8 @@ public class Skills : MonoBehaviour
         remainCooldown = roundCooldown;
 
         GenerateAnswer();
+
+        GameManager.instance.RightAnswerPos();
     }
 
     public CalcTypePM RandomOperator1()

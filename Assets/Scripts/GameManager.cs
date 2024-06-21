@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public bool isFighting;
     [HideInInspector] public bool isCalc;
     [HideInInspector] public bool falseAnswerIsGenerated;
+    [HideInInspector] public bool answerIsGenerated;
     [HideInInspector] public float remainTime;
     public float maxTime;
 
@@ -75,7 +76,23 @@ public class GameManager : MonoBehaviour
         remainTime = maxTime;
         isCalc = false;
     }
+    private void FixedUpdate()
+    {
+        if (isFighting)
+        {
+            if (falseAnswerIsGenerated) IncorrectNumberGenerator();
+            CombatManager();
+            if (isCalc)
+            {
+                RightAnswerPos();
+                CalcTimer();
+            }
 
+            UpdateCooldownTexts();
+            if (skills != null)
+                skills.UpdateCooldown();
+        }
+    }
     private void InitializeUIElements()
     {
         if (questionPanel != null) questionPanel.SetActive(false);
@@ -84,7 +101,6 @@ public class GameManager : MonoBehaviour
         if (secondBoss != null) secondBoss.SetActive(false);
         if (thirdBoss != null) thirdBoss.SetActive(false);
     }
-
     private void InitializeComponents()
     {
         advancedSkill = GetComponent<AdvancedSkill>();
@@ -115,22 +131,6 @@ public class GameManager : MonoBehaviour
         if (button2 != null) button2.onClick.AddListener(() => inputhandler.ValidateInput(textButton2.text));
         if (button3 != null) button3.onClick.AddListener(() => inputhandler.ValidateInput(textButton3.text));
     }
-
-    private void FixedUpdate()
-    {
-        if (isFighting)
-        {
-            if (falseAnswerIsGenerated) IncorrectNumberGenerator();
-            CombatManager();
-            if (isCalc)
-                CalcTimer();
-
-            UpdateCooldownTexts();
-            if (skills != null)
-                skills.UpdateCooldown();
-        }
-    }
-
     private void CombatManager()
     {
         if (isFighting)
@@ -144,7 +144,7 @@ public class GameManager : MonoBehaviour
             falseAnswerIsGenerated = false;
             skills.remainCooldown = 0;
         }
-        if (player.IsDead()) questionPanel.SetActive(false);
+        if (player.IsDead()) battlePanel.SetActive(false);
     }
     private void ActivateCombatUI()
     {
@@ -154,6 +154,10 @@ public class GameManager : MonoBehaviour
     private void ResetCombatState()
     {
         remainTime = maxTime;
+
+        skills.isOnCooldown = false;
+        skills.remainCooldown = 0;
+
         isTransitioning = true;
 
         if (battlePanel != null) battlePanel.SetActive(false);

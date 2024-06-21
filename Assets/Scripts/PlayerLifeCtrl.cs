@@ -24,8 +24,14 @@ public class PlayerLifeCtrl : LifeCtrl
         base.TakeDmg(_dmg);
         if (dead) return;
         playerHealthBar.fillAmount = (float)health / maxHealth;
+        if (health <= 0) playerHealthBar.fillAmount = 0;
         character.anim.SetTrigger("Hurt");
         StartCoroutine(nameof(DmgEffect));
+    }
+    public override void GetHeal(int _heal)
+    {
+        base.GetHeal(_heal);
+        playerHealthBar.fillAmount = (float)health / maxHealth;
     }
 
     public override void Die()

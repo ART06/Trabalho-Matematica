@@ -11,7 +11,6 @@ public class Player : Character
 
     public bool canMove;
     [HideInInspector] public bool timeToAttack;
-    public Animator healAnim;
 
     protected void Start()
     {

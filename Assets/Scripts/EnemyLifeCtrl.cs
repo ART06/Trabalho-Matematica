@@ -21,7 +21,7 @@ public class EnemyLifeCtrl : LifeCtrl
     {
         base.Die();
         enemy.anim.SetBool("Death", true);
-        Invoke(nameof(Deactivate), 2.5f);
+        Invoke(nameof(Deactivate), 0.5f);
     }
 
     public override void TakeDmg(int _value)

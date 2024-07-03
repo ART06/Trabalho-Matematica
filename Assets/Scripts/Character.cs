@@ -19,7 +19,6 @@ public class Character : MonoBehaviour
     [HideInInspector] public bool receivingDmg;
 
     public Animator anim;
-    public Animator healAnim;
 
     protected void Awake() 
     {

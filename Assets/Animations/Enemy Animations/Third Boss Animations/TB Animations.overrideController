@@ -9,11 +9,11 @@ AnimatorOverrideController:
   m_Name: TB Animations
   m_Controller: {fileID: 9100000, guid: eea603fde0d5a8146a667b3f396c50c5, type: 2}
   m_Clips:
-  - m_OriginalClip: {fileID: 7400000, guid: 3f411dd8b24aea64eb7ec955ccfd606e, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: 3d6722cb8e435b246bb12bc7c0488593, type: 2}
   - m_OriginalClip: {fileID: 7400000, guid: c83dd2a3d7fb1e1439c480013b15a18e, type: 2}
     m_OverrideClip: {fileID: 7400000, guid: f86de7b2ec404f04691857134d2b0541, type: 2}
   - m_OriginalClip: {fileID: 7400000, guid: f5b91c498c8685348a386e5d764857a3, type: 2}
     m_OverrideClip: {fileID: 7400000, guid: 608fda6030a5ff844bc5ad989f19770f, type: 2}
   - m_OriginalClip: {fileID: 7400000, guid: 00850c6c65b785840acf39eae90cc2b5, type: 2}
     m_OverrideClip: {fileID: 7400000, guid: 2a2faf68546605f459170466c5bb2a92, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: fb2879dcaa4188945bac0ceb7a4e2dcb, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 3d6722cb8e435b246bb12bc7c0488593, type: 2}

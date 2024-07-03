@@ -1,13 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
-using UnityEditor.Tilemaps;
+﻿using TMPro;
 using UnityEngine;
-using UnityEngine.Purchasing;
-using UnityEngine.Rendering.Universal;
-using UnityEngine.UI;
 
 public class Skills : MonoBehaviour
 {
@@ -38,8 +30,8 @@ public class Skills : MonoBehaviour
 
     [Header("UI Elements")]
     [SerializeField] internal TextMeshProUGUI questionText;
-    public int roundCooldown;  // Corrigido o nome para roundCooldown
-    public int remainCooldown; // Corrigido o nome para remainCooldown
+    public int roundCooldown;
+    public int remainCooldown;
 
     [Header("Game State Variables")]
     [HideInInspector] public bool isOnCooldown;
@@ -63,10 +55,8 @@ public class Skills : MonoBehaviour
     {
         if (isOnCooldown)
         {
-            Debug.Log("Skill is on cooldown.");
             return;
         }
-
         if (GameManager.instance.questionPanel != null) GameManager.instance.questionPanel.SetActive(true);
         GameManager.instance.isCalc = true;
         if (GameManager.instance.habilityPanel != null) GameManager.instance.habilityPanel.SetActive(false);

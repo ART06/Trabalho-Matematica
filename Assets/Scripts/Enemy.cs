@@ -2,11 +2,19 @@ using UnityEngine;
 
 public class Enemy : Character
 {
-    protected bool enemyTurn;
     protected int randomAction;
+    protected InputHandler input;
+    public Animator critAnim;
+    public Animator specAnim;
 
-    protected void OnBossRound()
+    protected virtual void Start()
     {
+        input = GetComponent<InputHandler>();
+    }
+    public virtual void BossRound()
+    {
+        if (!enemyTurn) return;
+
         randomAction = Random.Range(1, 3);
     }
     protected float DistanceToPlayer()

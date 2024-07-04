@@ -1,13 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class ThirdBoss : Enemy
 {
     public bool thirdBoss;
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         thirdBoss = true;
     }
     protected void FixedUpdate()

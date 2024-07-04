@@ -1,7 +1,6 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -12,7 +11,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Player and Enemy References")]
     protected Enemy enemy;
-    protected Character character;
+    [HideInInspector] public Character character;
     [HideInInspector] public Player player;
     [HideInInspector] public InputHandler inputhandler;
     [HideInInspector] public Skills skills;
@@ -150,6 +149,7 @@ public class GameManager : MonoBehaviour
     {
         if (battlePanel != null) battlePanel.SetActive(true);
         if (battleUI != null) battleUI.SetActive(true);
+        if (character != null) character.playerTurn = true;
     }
     private void ResetCombatState()
     {
@@ -228,6 +228,8 @@ public class GameManager : MonoBehaviour
         isFighting = false;
         player.canMove = true;
         if (battlePanel != null) battlePanel.SetActive(false);
+        if (character != null) character.playerTurn = false;
+        if (character != null) character.enemyTurn = false;
 
         inputhandler.UpdateCurrentEnemy();
 
@@ -254,7 +256,8 @@ public class GameManager : MonoBehaviour
 
     public void OnTurnEnd()
     {
-        advancedSkill.OnTurnEnd();
-        healSkill.OnTurnEnd();
+        if (character != null) character.playerTurn = false;
+        if (character != null) character.enemyTurn = true;
+        skills.OnTurnEnd();
     }
 }

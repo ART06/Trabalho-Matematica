@@ -32,6 +32,8 @@ public class Skills : MonoBehaviour
     [SerializeField] internal TextMeshProUGUI questionText;
     public int roundCooldown;
     public int remainCooldown;
+    public TextMeshProUGUI cooldownText;
+    public GameObject cooldownPanel;
 
     [Header("Game State Variables")]
     [HideInInspector] public bool isOnCooldown;
@@ -107,5 +109,12 @@ public class Skills : MonoBehaviour
                 remainCooldown = 0;
             }
         }
+    }
+    public virtual void OnTurnEnd()
+    {
+        if (!isOnCooldown) return;
+
+        remainCooldown--;
+        if (cooldownText != null) cooldownText.text = remainCooldown.ToString();
     }
 }

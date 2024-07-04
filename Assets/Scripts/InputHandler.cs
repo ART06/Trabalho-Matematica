@@ -1,7 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 
 public class InputHandler : MonoBehaviour
 {
@@ -61,20 +59,14 @@ public class InputHandler : MonoBehaviour
 
         if (_answer == GameManager.instance.skills.answer)
         {
-            if (GameManager.instance.advancedSkill != null && GameManager.instance.advancedSkill.isAdvanced)
-            {
-                playerDealDmg = true;
-                player.anim.SetTrigger("SpecialAttack");
-                StartCoroutine(nameof(PlayerDoubleDmg));
-                GameManager.instance.advancedSkill.isAdvanced = false;
-                Invoke(nameof(ActiveHabPanel), 1f);
-            }
-            else if (GameManager.instance.basicSkill != null && GameManager.instance.basicSkill.isBasic)
+            if (GameManager.instance.character != null) GameManager.instance.character.playerTurn = false;
+
+            if (GameManager.instance.basicSkill != null && GameManager.instance.basicSkill.isBasic)
             {
                 playerDealDmg = true;
                 player.anim.SetTrigger("NormalAttack");
                 GameManager.instance.basicSkill.isBasic = false;
-                Invoke(nameof(ActiveHabPanel), 1f);
+                StartCoroutine(nameof(ActiveHabPanel));
             }
             else if (GameManager.instance.healSkill != null && GameManager.instance.healSkill.isHeal)
             {
@@ -82,15 +74,19 @@ public class InputHandler : MonoBehaviour
                 GameManager.instance.healSkill.isHeal = false;
                 StartCoroutine(nameof(HealEvent));
             }
+            else if (GameManager.instance.advancedSkill != null && GameManager.instance.advancedSkill.isAdvanced)
+            {
+                playerDealDmg = true;
+                player.anim.SetTrigger("SpecialAttack");
+                StartCoroutine(nameof(PlayerDoubleDmg));
+                GameManager.instance.advancedSkill.isAdvanced = false;
+                StartCoroutine(nameof(ActiveHabPanel));
+            }
         }
         else if (_answer != GameManager.instance.skills.answer)
         {
-            monsterDealDmg = true;
-            if (enemy != null)
-            {
-                enemy.anim.SetTrigger("Attack");
-                Invoke(nameof(ActiveHabPanel), 1f);
-            }
+            if (GameManager.instance.character != null) GameManager.instance.character.playerTurn = false;
+
             GameManager.instance.advancedSkill.isAdvanced = false;
             GameManager.instance.basicSkill.isBasic = false;
             GameManager.instance.healSkill.isHeal = false;
@@ -105,12 +101,14 @@ public class InputHandler : MonoBehaviour
     public IEnumerator HealEvent()
     {
         player.healAnim.SetTrigger("Heal");
-        Invoke(nameof(ActiveHabPanel), 3f);
+        StartCoroutine(nameof(ActiveHabPanel));
         yield return new WaitForSeconds(1.5f);
         player.Life.GetHeal(player.Life.healValue);
     }
-    public void ActiveHabPanel()
+    public IEnumerator ActiveHabPanel()
     {
+        yield return new WaitForSeconds(3f);
         GameManager.instance.habilityPanel.SetActive(true);
+        if (GameManager.instance.character != null) GameManager.instance.character.playerTurn = true;
     }
 }

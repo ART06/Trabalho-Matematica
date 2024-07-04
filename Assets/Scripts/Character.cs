@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Character : MonoBehaviour
@@ -17,10 +15,12 @@ public class Character : MonoBehaviour
 
     protected CauseDmg CauseDmg;
     [HideInInspector] public bool receivingDmg;
+    [HideInInspector] public bool enemyTurn;
+    [HideInInspector] public bool playerTurn;
 
     public Animator anim;
 
-    protected void Awake() 
+    protected void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         inputHandler = GetComponent<InputHandler>();

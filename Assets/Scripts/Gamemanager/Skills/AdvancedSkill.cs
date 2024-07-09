@@ -1,11 +1,13 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class AdvancedSkill : Skills
 {
     public bool isAdvanced;
     public Button advanced;
-
+    public TextMeshProUGUI cooldownText;
+    public GameObject cooldownPanel;
     public override void Start()
     {
         base.Start();
@@ -162,15 +164,25 @@ public class AdvancedSkill : Skills
                 break;
         }
     }
-    public override void OnTurnEnd()
+    public void OnTurnEnd()
     {
-        if (remainCooldown <= 0)
+        if (isOnCooldown)
         {
-            if (advanced != null)
-                advanced.gameObject.SetActive(true);
-            if (cooldownPanel != null)
-                cooldownPanel.SetActive(false);
+            remainCooldown--;
+            if (cooldownText != null) cooldownText.text = remainCooldown.ToString();
+            if (remainCooldown <= 0)
+            {
+                if (advanced != null)
+                    advanced.gameObject.SetActive(true);
+                if (cooldownPanel != null)
+                    cooldownPanel.SetActive(false);
+                isOnCooldown = false;
+            }
+        }
+        else
+        {
             isOnCooldown = false;
+            remainCooldown = 0;
         }
     }
 }

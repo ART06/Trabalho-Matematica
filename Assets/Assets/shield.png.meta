@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 7c9eceac39cb8b94bb0aee71f40f12b2
+guid: e14913ceb7c38cf499505e5944ad1d2d
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -42,7 +42,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -115,112 +115,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: summon_3
-      rect:
-        serializedVersion: 2
-        x: 334
-        y: 117
-        width: 55
-        height: 73
-      alignment: 9
-      pivot: {x: 0.5, y: 0.47260273}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: bd7ed68da2d44474295097480ac38e31
-      internalID: -1783147289
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: summon_2
-      rect:
-        serializedVersion: 2
-        x: 234
-        y: 117
-        width: 55
-        height: 73
-      alignment: 9
-      pivot: {x: 0.5, y: 0.47260273}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 89d2add7c1fad544396e8df1cc0e38f1
-      internalID: -1611639977
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: summon_1
-      rect:
-        serializedVersion: 2
-        x: 134
-        y: 117
-        width: 55
-        height: 73
-      alignment: 9
-      pivot: {x: 0.5, y: 0.47260273}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 83fa96cdcc881d6488b4046bc6904d13
-      internalID: -1376465552
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: summon_0
-      rect:
-        serializedVersion: 2
-        x: 34
-        y: 117
-        width: 55
-        height: 73
-      alignment: 9
-      pivot: {x: 0.5, y: 0.47260273}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c12c8436181b3a448b5bcbc8a63dc463
-      internalID: 1485957783
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: summon_4
-      rect:
-        serializedVersion: 2
-        x: 34
-        y: 17
-        width: 55
-        height: 73
-      alignment: 9
-      pivot: {x: 0.5, y: 0.47260273}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: cb2a4dc4f19e93c4b811d73278cfdbbb
-      internalID: -1713429813
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     physicsShape: []
     bones: []
@@ -231,12 +126,7 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable:
-      summon_0: 1485957783
-      summon_1: -1376465552
-      summon_2: -1611639977
-      summon_3: -1783147289
-      summon_4: -1713429813
+    nameFileIdTable: {}
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

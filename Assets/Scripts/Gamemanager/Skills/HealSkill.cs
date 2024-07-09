@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -5,7 +6,8 @@ public class HealSkill : Skills
 {
     public bool isHeal;
     public Button heal;
-
+    public TextMeshProUGUI cooldownText;
+    public GameObject cooldownPanel;
     public override void Start()
     {
         base.Start();
@@ -91,15 +93,25 @@ public class HealSkill : Skills
         }
     }
 
-    public override void OnTurnEnd()
+    public void OnTurnEnd()
     {
-        if (remainCooldown <= 0)
+        if (isOnCooldown)
         {
-            if (heal != null)
-                heal.gameObject.SetActive(true);
-            if (cooldownPanel != null)
-                cooldownPanel.SetActive(false);
+            remainCooldown--;
+            if (cooldownText != null) cooldownText.text = remainCooldown.ToString();
+            if (remainCooldown <= 0)
+            {
+                if (heal != null)
+                    heal.gameObject.SetActive(true);
+                if (cooldownPanel != null)
+                    cooldownPanel.SetActive(false);
+                isOnCooldown = false;
+            }
+        }
+        else
+        {
             isOnCooldown = false;
+            remainCooldown = 0;
         }
     }
 }

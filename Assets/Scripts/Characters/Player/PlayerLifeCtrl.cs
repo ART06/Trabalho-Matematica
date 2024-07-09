@@ -7,7 +7,6 @@ public class PlayerLifeCtrl : LifeCtrl
 {
     #region Variables
     public SpriteRenderer sprite;
-    public Image playerHealthBar;
     #endregion
 
     #region Unity Methods
@@ -22,16 +21,7 @@ public class PlayerLifeCtrl : LifeCtrl
     public override void TakeDmg(int _dmg)
     {
         base.TakeDmg(_dmg);
-        if (dead) return;
-        playerHealthBar.fillAmount = (float)health / maxHealth;
-        if (health <= 0) playerHealthBar.fillAmount = 0;
-        character.anim.SetTrigger("Hurt");
         StartCoroutine(nameof(DmgEffect));
-    }
-    public override void GetHeal(int _heal)
-    {
-        base.GetHeal(_heal);
-        playerHealthBar.fillAmount = (float)health / maxHealth;
     }
 
     public override void Die()

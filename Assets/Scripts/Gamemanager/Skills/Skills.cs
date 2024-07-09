@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class Skills : MonoBehaviour
 {
-    // Enums
     public ActionType actionType;
     public enum ActionType { basic, heal, advanced }
 
@@ -32,8 +31,6 @@ public class Skills : MonoBehaviour
     [SerializeField] internal TextMeshProUGUI questionText;
     public int roundCooldown;
     public int remainCooldown;
-    public TextMeshProUGUI cooldownText;
-    public GameObject cooldownPanel;
 
     [Header("Game State Variables")]
     [HideInInspector] public bool isOnCooldown;
@@ -97,7 +94,6 @@ public class Skills : MonoBehaviour
         System.Random _random = new();
         return (CalcTypeSS)_operators.GetValue(_random.Next(_operators.Length));
     }
-
     public void UpdateCooldown()
     {
         if (remainCooldown > 0)
@@ -109,12 +105,5 @@ public class Skills : MonoBehaviour
                 remainCooldown = 0;
             }
         }
-    }
-    public virtual void OnTurnEnd()
-    {
-        if (!isOnCooldown) return;
-
-        remainCooldown--;
-        if (cooldownText != null) cooldownText.text = remainCooldown.ToString();
     }
 }

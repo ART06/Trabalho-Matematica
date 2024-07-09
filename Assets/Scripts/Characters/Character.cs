@@ -15,8 +15,6 @@ public class Character : MonoBehaviour
 
     protected CauseDmg CauseDmg;
     [HideInInspector] public bool receivingDmg;
-    [HideInInspector] public bool enemyTurn;
-    [HideInInspector] public bool playerTurn;
 
     public Animator anim;
 

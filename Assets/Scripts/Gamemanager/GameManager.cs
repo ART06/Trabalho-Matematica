@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    private int[] falseAnswer = new int[2];
+    private readonly int[] falseAnswer = new int[2];
 
     public static GameManager instance;
 
@@ -31,6 +31,8 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public bool answerIsGenerated;
     [HideInInspector] public float remainTime;
     public float maxTime;
+    public bool enemyTurn;
+    public bool playerTurn;
 
     [Header("UI Elements")]
     public Image timerBar;
@@ -74,6 +76,8 @@ public class GameManager : MonoBehaviour
     {
         remainTime = maxTime;
         isCalc = false;
+        playerTurn = false;
+        enemyTurn = false;
     }
     private void FixedUpdate()
     {
@@ -141,7 +145,6 @@ public class GameManager : MonoBehaviour
         {
             ResetCombatState();
             falseAnswerIsGenerated = false;
-            skills.remainCooldown = 0;
         }
         if (player.IsDead()) battlePanel.SetActive(false);
     }
@@ -149,18 +152,16 @@ public class GameManager : MonoBehaviour
     {
         if (battlePanel != null) battlePanel.SetActive(true);
         if (battleUI != null) battleUI.SetActive(true);
-        if (character != null) character.playerTurn = true;
+        GameManager.instance.playerTurn = true;
     }
     private void ResetCombatState()
     {
         remainTime = maxTime;
 
-        skills.isOnCooldown = false;
-        skills.remainCooldown = 0;
-
         isTransitioning = true;
 
         if (battlePanel != null) battlePanel.SetActive(false);
+        if (habilityPanel != null) habilityPanel.SetActive(true);
     }
     public void CalcTimer()
     {
@@ -213,11 +214,6 @@ public class GameManager : MonoBehaviour
     {
         remainTime = maxTime;
         if (battlePanel != null) battlePanel.SetActive(true);
-        if (inputhandler != null)
-        {
-            inputhandler.playerDealDmg = false;
-            inputhandler.monsterDealDmg = false;
-        }
         IncorrectNumberGenerator();
         RightAnswerPos();
     }
@@ -228,8 +224,8 @@ public class GameManager : MonoBehaviour
         isFighting = false;
         player.canMove = true;
         if (battlePanel != null) battlePanel.SetActive(false);
-        if (character != null) character.playerTurn = false;
-        if (character != null) character.enemyTurn = false;
+        GameManager.instance.playerTurn = false;
+        GameManager.instance.enemyTurn = false;
 
         inputhandler.UpdateCurrentEnemy();
 
@@ -252,12 +248,15 @@ public class GameManager : MonoBehaviour
 
         if (healSkill != null && healSkill.cooldownText != null)
             healSkill.cooldownText.text = healSkill.remainCooldown > 0 ? healSkill.remainCooldown.ToString() : "";
+
+        if (enemy != null && enemy.cooldownText != null)
+            enemy.cooldownText.text = enemy.remainCooldown > 0 ? enemy.remainCooldown.ToString() : "";
     }
 
     public void OnTurnEnd()
     {
-        if (character != null) character.playerTurn = false;
-        if (character != null) character.enemyTurn = true;
-        skills.OnTurnEnd();
+        playerTurn = false;
+        healSkill.OnTurnEnd();
+        advancedSkill.OnTurnEnd();
     }
 }

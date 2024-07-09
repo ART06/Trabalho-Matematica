@@ -6,14 +6,6 @@ public class BasicSkill : Skills
     public bool isBasic;
     public Button basic;
 
-    public override void Start()
-    {
-        base.Start();
-        if (cooldownPanel != null)
-            cooldownPanel.SetActive(false);
-        if (GameManager.instance.isFighting && cooldownText != null)
-            cooldownText.text = remainCooldown.ToString();
-    }
     public override void ActivateSkill()
     {
         base.ActivateSkill();

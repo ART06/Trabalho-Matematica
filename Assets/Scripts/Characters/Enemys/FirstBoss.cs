@@ -15,28 +15,30 @@ public class FirstBoss : Enemy
         if (DistanceToPlayer() <= atqRange && firstBoss) GameManager.instance.isFighting = true;
         if (GameManager.instance.enemyTurn) BossRound();
     }
-    public void BossRound()
+    public override void BossRound()
     {
         if (GameManager.instance.isFighting && GameManager.instance.enemyTurn)
         {
-            randomAction = Random.Range(0, 10);
-            GameManager.instance.enemyTurn = false;
-
-            if (randomAction <= 4)
+            base.BossRound();
+            
+            if (randomAction <= 5)
             {
                 if (enemy != null) enemy.anim.SetTrigger("Attack");
                 Invoke("ActiveHabPanel", 1f);
             }
-            else if (randomAction >= 5 && randomAction <= 7)
+            else if (randomAction == 6 || randomAction == 7)
             {
                 if (enemy != null) enemy.anim.SetTrigger("Crit Atk");
                 if (enemy != null) critAnim.SetTrigger("Crit");
                 StartCoroutine(nameof(EnemyDoubleDmg));
                 Invoke("ActiveHabPanel", 1f);
             }
-            else if (randomAction >= 8 && Life.health < Life.maxHealth/(3/2) && !specIsOnCooldown)
+            else if (randomAction >= 8 && Life.health < Life.maxHealth && !specIsOnCooldown)
             {
                 StartCoroutine(HealEvent());
+                remainCooldown = roundCooldown;
+                specIsOnCooldown = true;
+                if (cooldownPanel != null) cooldownPanel.SetActive(true);
             }
             else BossRound();
         }

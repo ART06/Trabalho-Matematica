@@ -668,6 +668,8 @@ MonoBehaviour:
   falseAnswerIsGenerated: 0
   answerIsGenerated: 0
   remainTime: 0
+  rightPos: 0
+  correctAnswer: 0
   maxTime: 30
   enemyTurn: 0
   playerTurn: 0
@@ -700,6 +702,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfc3940c7106a5749ae653555acec289, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  wrongAnswer: 0
 --- !u!4 &223760640
 Transform:
   m_ObjectHideFlags: 0
@@ -727,15 +730,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 385085859da94ea46af4f6c9d3874e6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actionType: 0
-  calcTypeMD: 0
-  calcTypePM: 0
-  calcTypeSS: 0
   answer: 0
   question: 
   maxIterations: 0
   iterationCount: 0
-  rightPos: 0
   offset: 0
   questionText: {fileID: 327626804}
   roundCooldown: 0
@@ -754,15 +752,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4493d41116ce4ec4b8761c692cefe91d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actionType: 0
-  calcTypeMD: 0
-  calcTypePM: 0
-  calcTypeSS: 0
   answer: 0
   question: 
   maxIterations: 0
   iterationCount: 0
-  rightPos: 0
   offset: 0
   questionText: {fileID: 327626804}
   roundCooldown: 4
@@ -785,15 +778,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b5087be55bb79e4fa49aa176f56d9a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actionType: 0
-  calcTypeMD: 0
-  calcTypePM: 0
-  calcTypeSS: 0
   answer: 0
   question: 
   maxIterations: 0
   iterationCount: 0
-  rightPos: 0
   offset: 0
   questionText: {fileID: 327626804}
   roundCooldown: 3
@@ -816,15 +804,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f9d12db8149c9144b60ab00ed2c03f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actionType: 0
-  calcTypeMD: 0
-  calcTypePM: 0
-  calcTypeSS: 0
   answer: 0
   question: 
   maxIterations: 0
   iterationCount: 0
-  rightPos: 0
   offset: 0
   questionText: {fileID: 327626804}
   roundCooldown: 0
@@ -1861,6 +1844,7 @@ MonoBehaviour:
   maxHealth: 10
   dead: 0
   canHeal: 0
+  isShielded: 0
   shield: 0
   shieldValue: 0
   maxShield: 0
@@ -1926,6 +1910,7 @@ MonoBehaviour:
   specAnim: {fileID: 0}
   cooldownText: {fileID: 462686896}
   cooldownPanel: {fileID: 1366430917}
+  enemySkill: {fileID: 0}
   specIsOnCooldown: 0
   thirdBoss: 0
 --- !u!1 &559062878
@@ -2527,6 +2512,7 @@ MonoBehaviour:
   maxHealth: 7
   dead: 0
   canHeal: 1
+  isShielded: 0
   shield: 0
   shieldValue: 0
   maxShield: 0
@@ -2876,6 +2862,7 @@ MonoBehaviour:
   maxHealth: 6
   dead: 0
   canHeal: 1
+  isShielded: 0
   shield: 0
   shieldValue: 0
   maxShield: 0
@@ -2908,6 +2895,7 @@ MonoBehaviour:
   specAnim: {fileID: 1341298669}
   cooldownText: {fileID: 462686896}
   cooldownPanel: {fileID: 1366430917}
+  enemySkill: {fileID: 1785560391}
   specIsOnCooldown: 0
   firstBoss: 0
 --- !u!1 &962498765
@@ -5284,9 +5272,10 @@ MonoBehaviour:
   lifeAnim: {fileID: 1156979449}
   health: 0
   healValue: 0
-  maxHealth: 7
+  maxHealth: 8
   dead: 0
   canHeal: 0
+  isShielded: 0
   shield: 0
   shieldValue: 1
   maxShield: 0
@@ -5353,6 +5342,7 @@ MonoBehaviour:
   specAnim: {fileID: 1873010397}
   cooldownText: {fileID: 462686896}
   cooldownPanel: {fileID: 1366430917}
+  enemySkill: {fileID: 1785560391}
   specIsOnCooldown: 0
   secondBoss: 0
 --- !u!1 &1785560391

@@ -9,6 +9,7 @@ public class SecondBoss : Enemy
     {
         base.Start();
         secondBoss = true;
+        Life.shieldBar.fillAmount = 0;
     }
     protected void FixedUpdate()
     {
@@ -17,52 +18,56 @@ public class SecondBoss : Enemy
             GameManager.instance.isFighting = true;
             Life.shieldBar.gameObject.SetActive(true);
         }
-            if (GameManager.instance.enemyTurn) BossRound();
-        if (enemy != null) ShieldEvent();
+        else Life.shieldBar.gameObject.SetActive(false);
+        if (GameManager.instance.enemyTurn) BossRound();
     }
-    public void BossRound()
+    public override void BossRound()
     {
         if (GameManager.instance.isFighting && GameManager.instance.enemyTurn)
         {
-            randomAction = Random.Range(0, 10);
-            GameManager.instance.enemyTurn = false;
+            base.BossRound();
 
-            if (randomAction <= 4)
+            if (randomAction <= 5)
             {
                 if (enemy != null) enemy.anim.SetTrigger("Attack");
                 Invoke("ActiveHabPanel", 1f);
             }
-            else if (randomAction >= 5 && randomAction <= 7)
+            else if (randomAction == 6 || randomAction == 7)
             {
-                if (enemy != null) enemy.anim.SetTrigger("Crit Atk");
-                if (enemy != null) critAnim.SetTrigger("Crit");
-                StartCoroutine(nameof(EnemyDoubleDmg));
-                Invoke("ActiveHabPanel", 1f);
+                StartCoroutine(nameof(CritEvent));
             }
             else if (randomAction >= 8 && !specIsOnCooldown)
             {
                 if (enemy != null) specAnim.SetBool("Is Shield", true);
                 Life.GetHeal(Life.shieldValue);
+                Life.isShielded = true;
             }
             else BossRound();
         }
         GameManager.instance.enemyTurn = false;
     }
-    public void ShieldEvent()
+    public IEnumerator CritEvent()
     {
-        if (Life.shield <= 0)
+        if (enemy != null) enemy.anim.SetTrigger("Attack");
+        yield return new WaitForSeconds(1.5f);
+        if (enemy != null) enemy.anim.SetTrigger("Attack");
+        Invoke("ActiveHabPanel", 1.5f);
+    }
+    public override void TakeDmg(int _value)
+    {
+        base.TakeDmg(_value);
+
+        if (Life.shield <= 0 && Life.isShielded)
+        {
             if (enemy != null) specAnim.SetBool("Is Shield", true);
             if (enemy != null) specAnim.SetTrigger("Shield Break");
+            Life.isShielded = false;
+        }
     }
     public override void Death()
     {
         base.Death();
         secondBoss = false;
         GameManager.instance.OnBossDeath(this);
-    }
-    public override void TakeDmg(int _value)
-    {
-        base.TakeDmg(_value);
-        if (Life.health <= 0) Life.shieldBar.gameObject.SetActive(false);
     }
 }

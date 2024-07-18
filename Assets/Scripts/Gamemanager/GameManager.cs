@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using TMPro;
+using UnityEditor;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,7 +9,7 @@ public class GameManager : MonoBehaviour
 {
     private readonly int[] falseAnswer = new int[2];
 
-    public static GameManager instance;
+    [HideInInspector] public static GameManager instance;
 
     [Header("Player and Enemy References")]
     protected Enemy enemy;
@@ -15,9 +17,9 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public Player player;
     [HideInInspector] public InputHandler inputhandler;
     [HideInInspector] public Skills skills;
-    public BasicSkill basicSkill;
-    public HealSkill healSkill;
-    public AdvancedSkill advancedSkill;
+    [HideInInspector] public BasicSkill basicSkill;
+    [HideInInspector] public HealSkill healSkill;
+    [HideInInspector] public AdvancedSkill advancedSkill;
 
     [Header("Boss References")]
     [HideInInspector] public FirstBoss fb;
@@ -30,9 +32,14 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public bool falseAnswerIsGenerated;
     [HideInInspector] public bool answerIsGenerated;
     [HideInInspector] public float remainTime;
+    [HideInInspector] public int rightPos;
+    [HideInInspector] public int correctAnswer;
+    [HideInInspector] public int offset;
+    [HideInInspector] public int lastRightPos;
+
     public float maxTime;
-    public bool enemyTurn;
-    public bool playerTurn;
+    [HideInInspector] public bool enemyTurn;
+    [HideInInspector] public bool playerTurn;
 
     [Header("UI Elements")]
     public Image timerBar;
@@ -53,8 +60,6 @@ public class GameManager : MonoBehaviour
     public Text textButton2;
     public Text textButton3;
 
-    protected bool isTransitioning;
-
     private void Awake()
     {
         if (instance == null)
@@ -71,39 +76,54 @@ public class GameManager : MonoBehaviour
         InitializeComponents();
         SetupButtonListeners();
     }
-
     private void Start()
     {
         remainTime = maxTime;
         isCalc = false;
         playerTurn = false;
         enemyTurn = false;
+        lastRightPos = -1;
     }
     private void FixedUpdate()
     {
         if (isFighting)
         {
-            if (falseAnswerIsGenerated) IncorrectNumberGenerator();
-            CombatManager();
-            if (isCalc)
+            if (falseAnswerIsGenerated)
             {
+                Debug.Log("resposta correta: " + correctAnswer);
                 RightAnswerPos();
-                CalcTimer();
+                IncorrectNumberGenerator();
+                falseAnswerIsGenerated = false;
             }
+            CombatManager();
+
+            if (isCalc)
+                CalcTimer();
 
             UpdateCooldownTexts();
-            if (skills != null)
-                skills.UpdateCooldown();
+            skills.UpdateCooldown();
+            enemy.UpdateCooldown();
         }
     }
+
     private void InitializeUIElements()
     {
-        if (questionPanel != null) questionPanel.SetActive(false);
-        if (battlePanel != null) battlePanel.SetActive(false);
-        if (deathPanel != null) deathPanel.SetActive(false);
-        if (secondBoss != null) secondBoss.SetActive(false);
-        if (thirdBoss != null) thirdBoss.SetActive(false);
+        if (questionPanel != null)
+            questionPanel.SetActive(false);
+
+        if (battlePanel != null)
+            battlePanel.SetActive(false);
+
+        if (deathPanel != null)
+            deathPanel.SetActive(false);
+
+        if (secondBoss != null)
+            secondBoss.SetActive(false);
+
+        if (thirdBoss != null)
+            thirdBoss.SetActive(false);
     }
+
     private void InitializeComponents()
     {
         advancedSkill = GetComponent<AdvancedSkill>();
@@ -113,27 +133,26 @@ public class GameManager : MonoBehaviour
         skills = GetComponent<Skills>();
 
         player = FindObjectOfType<Player>();
+        enemy = FindObjectOfType<Enemy>();
         sb = FindObjectOfType<SecondBoss>();
         fb = FindObjectOfType<FirstBoss>();
         tb = FindObjectOfType<ThirdBoss>();
 
-        enemy = inputhandler.GetCurrentEnemy();
         inputhandler.UpdateCurrentEnemy();
-
-        if (advancedSkill == null) Debug.LogError("AdvancedSkill is not assigned in GameManager");
-        if (inputhandler == null) Debug.LogError("InputHandler is not assigned in GameManager");
-        if (basicSkill == null) Debug.LogError("BasicSkill is not assigned in GameManager");
-        if (healSkill == null) Debug.LogError("HealSkill is not assigned in GameManager");
-        if (skills == null) Debug.LogError("Skills is not assigned in GameManager");
-        if (player == null) Debug.LogError("Player is not assigned in GameManager");
     }
 
     private void SetupButtonListeners()
     {
-        if (button1 != null) button1.onClick.AddListener(() => inputhandler.ValidateInput(textButton1.text));
-        if (button2 != null) button2.onClick.AddListener(() => inputhandler.ValidateInput(textButton2.text));
-        if (button3 != null) button3.onClick.AddListener(() => inputhandler.ValidateInput(textButton3.text));
+        if (button1 != null)
+            button1.onClick.AddListener(() => inputhandler.ValidateInput(textButton1.text));
+
+        if (button2 != null)
+            button2.onClick.AddListener(() => inputhandler.ValidateInput(textButton2.text));
+
+        if (button3 != null)
+            button3.onClick.AddListener(() => inputhandler.ValidateInput(textButton3.text));
     }
+
     private void CombatManager()
     {
         if (isFighting)
@@ -146,76 +165,105 @@ public class GameManager : MonoBehaviour
             ResetCombatState();
             falseAnswerIsGenerated = false;
         }
-        if (player.IsDead()) battlePanel.SetActive(false);
+
+        if (player.IsDead())
+            battlePanel.SetActive(false);
     }
+
     private void ActivateCombatUI()
     {
-        if (battlePanel != null) battlePanel.SetActive(true);
-        if (battleUI != null) battleUI.SetActive(true);
-        GameManager.instance.playerTurn = true;
+        if (battlePanel != null)
+            battlePanel.SetActive(true);
+
+        if (battleUI != null)
+            battleUI.SetActive(true);
+
+        playerTurn = true;
     }
+
     private void ResetCombatState()
     {
+        habilityPanel.SetActive(true);
         remainTime = maxTime;
-
-        isTransitioning = true;
-
-        if (battlePanel != null) battlePanel.SetActive(false);
-        if (habilityPanel != null) habilityPanel.SetActive(true);
+        enemyTurn = false;
+        battlePanel.SetActive(false);
+        enemy.Life.healthBar.fillAmount = 1f;
     }
+
     public void CalcTimer()
     {
         remainTime -= Time.deltaTime;
         timerBar.fillAmount = remainTime / maxTime;
     }
+
     public void IncorrectNumberGenerator()
     {
         for (int i = 0; i < falseAnswer.Length; i++)
         {
-            skills.offset = Random.Range(50, 150);
+            offset = Random.Range(50, 151);
 
             if (Random.value > 0.5f)
-                falseAnswer[i] = (int)skills.answer + skills.offset;
-            else
-                falseAnswer[i] = (int)skills.answer - skills.offset;
-
-            if (falseAnswer[i] == skills.answer)
-                falseAnswer[i] += skills.offset;
-
-            if (i >= 2)
             {
-                falseAnswerIsGenerated = false;
-                break;
+                falseAnswer[i] = (int)correctAnswer + offset;
+                Debug.Log("adiconando " + offset + " na resposta incorreta");
             }
+            else
+            {
+                falseAnswer[i] = (int)correctAnswer - offset;
+                Debug.Log("retirando " + offset + " da resposta incorreta");
+            }
+
+            if (falseAnswer[i] == correctAnswer)
+                falseAnswer[i] += offset;
+
+            if (i >= 2) break;
         }
+        falseAnswerIsGenerated = true;
     }
+
     public void RightAnswerPos()
     {
-        if (skills.rightPos == 0)
+        if (rightPos == 0)
         {
-            textButton1.text = skills.answer.ToString();
-            textButton2.text = falseAnswer[0].ToString();
-            textButton3.text = falseAnswer[1].ToString();
+            if (textButton1 != null)
+                textButton1.text = correctAnswer.ToString();
+            if (textButton2 != null)
+                textButton2.text = falseAnswer[0].ToString();
+            if (textButton3 != null)
+                textButton3.text = falseAnswer[1].ToString();
         }
-        else if (skills.rightPos == 1)
+        else if (rightPos == 1)
         {
-            textButton1.text = falseAnswer[0].ToString();
-            textButton2.text = skills.answer.ToString();
-            textButton3.text = falseAnswer[1].ToString();
+            if (textButton1 != null)
+                textButton1.text = falseAnswer[0].ToString();
+            if (textButton2 != null)
+                textButton2.text = correctAnswer.ToString();
+            if (textButton3 != null)
+                textButton3.text = falseAnswer[1].ToString();
         }
         else
         {
-            textButton1.text = falseAnswer[0].ToString();
-            textButton2.text = falseAnswer[1].ToString();
-            textButton3.text = skills.answer.ToString();
+            if (textButton1 != null)
+                textButton1.text = falseAnswer[0].ToString();
+            if (textButton2 != null)
+                textButton2.text = falseAnswer[1].ToString();
+            if (textButton3 != null)
+                textButton3.text = correctAnswer.ToString();
         }
     }
-    public void ActivatePanel()
+    public IEnumerator ActivatePanel()
     {
-        remainTime = maxTime;
-        if (battlePanel != null) battlePanel.SetActive(true);
+        remainTime = maxTime + 0.2f;
+        
+        do rightPos = Random.Range(0, 3);
+        while (rightPos == lastRightPos);
+        lastRightPos = rightPos;
+        
         IncorrectNumberGenerator();
         RightAnswerPos();
+        yield return new WaitForSeconds(1f);
+        if (battlePanel != null)
+            battlePanel.SetActive(true);
     }
 
     public void OnBossDeath(Enemy boss)
@@ -223,24 +271,29 @@ public class GameManager : MonoBehaviour
         maxTime += 2;
         isFighting = false;
         player.canMove = true;
-        if (battlePanel != null) battlePanel.SetActive(false);
-        GameManager.instance.playerTurn = false;
-        GameManager.instance.enemyTurn = false;
+        battlePanel.SetActive(false);
+        playerTurn = false;
+        enemyTurn = false;
 
         inputhandler.UpdateCurrentEnemy();
 
-        if (boss is FirstBoss) StartCoroutine(ActivateNextBoss(secondBoss));
-        else if (boss is SecondBoss) StartCoroutine(ActivateNextBoss(thirdBoss));
+        if (boss is FirstBoss)
+            StartCoroutine(ActivateNextBoss(secondBoss));
+        else if (boss is SecondBoss)
+            StartCoroutine(ActivateNextBoss(thirdBoss));
     }
+
     private IEnumerator ActivateNextBoss(GameObject nextBoss)
     {
         yield return new WaitForSeconds(1f);
+
         if (nextBoss != null)
         {
             nextBoss.SetActive(true);
             inputhandler.UpdateCurrentEnemy();
         }
     }
+
     public void UpdateCooldownTexts()
     {
         if (advancedSkill != null && advancedSkill.cooldownText != null)

@@ -8,6 +8,7 @@ public class HealSkill : Skills
     public Button heal;
     public TextMeshProUGUI cooldownText;
     public GameObject cooldownPanel;
+
     public override void Start()
     {
         base.Start();
@@ -34,63 +35,58 @@ public class HealSkill : Skills
         {
             calculationSuccessful = true;
             iterationCount = 0;
-            squaredNumber = Random.Range(2, 20);
+            squaredNumber = Random.Range(2, 21);
             specialNumbers1 = (int)Mathf.Pow(squaredNumber, 2);
+            specialNumbers2 = Random.Range(2, 21);
             question = $"{squaredNumber}²";
-            switch (calcTypeMD)
+
+            if (calcMD == 0)
             {
-                case CalcTypeMD.Multi:
-                    specialNumbers2 = Random.Range(2, 20);
-                    preAnswer = specialNumbers1 * specialNumbers2;
-                    question += $" * {specialNumbers2}";
-                    break;
-                case CalcTypeMD.Division:
-                    specialNumbers2 = Random.Range(2, 20);
-                    while (true)
+                preAnswer = specialNumbers1 * specialNumbers2;
+                question += $" * {specialNumbers2}";
+            }
+            else
+            {
+                while (true)
+                {
+                    if (specialNumbers2 == 0)
                     {
-                        if (specialNumbers2 == 0)
-                        {
-                            Debug.Log("Divisão por zero evitada, tentando novamente...");
-                            calculationSuccessful = false;
-                            break;
-                        }
-                        if (specialNumbers1 % specialNumbers2 != 0)
-                        {
-                            Debug.Log("Divisão inexata, tentando novamente...");
-                            calculationSuccessful = false;
-                            break;
-                        }
-                        if (specialNumbers1 % specialNumbers2 == 0)
-                        {
-                            preAnswer = specialNumbers1 / specialNumbers2;
-                            question = $"{specialNumbers1} : {specialNumbers2}";
-                            break;
-                        }
-                        iterationCount++;
-                        if (iterationCount >= maxIterations)
-                        {
-                            Debug.Log("Loop infinito evitado, tentando novamente...");
-                            calculationSuccessful = false;
-                            break;
-                        }
-                        specialNumbers2 = Random.Range(2, 20);
+                        calculationSuccessful = false;
+                        break;
                     }
-                    break;
+                    if (specialNumbers1 % specialNumbers2 != 0)
+                    {
+                        calculationSuccessful = false;
+                        break;
+                    }
+                    if (specialNumbers1 % specialNumbers2 == 0)
+                    {
+                        preAnswer = specialNumbers1 / specialNumbers2;
+                        question = $"{specialNumbers1} : {specialNumbers2}";
+                        break;
+                    }
+                    iterationCount++;
+                    if (iterationCount >= maxIterations)
+                    {
+                        calculationSuccessful = false;
+                        break;
+                    }
+                    specialNumbers2 = Random.Range(2, 21);
+                }
             }
         }
         while (!calculationSuccessful);
-
-        switch (calcTypePM)
+        if (calcPM == 0)
         {
-            case CalcTypePM.Plus:
-                answer = preAnswer + basicNumbers;
-                questionText.text = $"{question} + {basicNumbers} = ?";
-                break;
-            case CalcTypePM.Minus:
-                answer = preAnswer - basicNumbers;
-                questionText.text = $"{question} - {basicNumbers} = ?";
-                break;
+            answer = preAnswer + basicNumbers;
+            questionText.text = $"{question} + {basicNumbers} = ?";
         }
+        else
+        {
+            answer = preAnswer - basicNumbers;
+            questionText.text = $"{question} - {basicNumbers} = ?";
+        }
+        FinalAnswer();
     }
 
     public void OnTurnEnd()

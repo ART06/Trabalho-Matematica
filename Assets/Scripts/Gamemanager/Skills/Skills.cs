@@ -3,29 +3,21 @@ using UnityEngine;
 
 public class Skills : MonoBehaviour
 {
-    public ActionType actionType;
-    public enum ActionType { basic, heal, advanced }
-
-    public CalcTypeMD calcTypeMD;
-    public CalcTypePM calcTypePM;
-    public CalcTypeSS calcTypeSS;
-    public enum CalcTypeMD { Multi, Division }
-    public enum CalcTypePM { Plus, Minus }
-    public enum CalcTypeSS { SqrRoot, Squared }
-
     [Header("Calculation Variables")]
+    protected int calcMD;
+    protected int calcPM;
+    protected int calcSS;
     protected int specialNumbers1;
     protected int specialNumbers2;
     protected int basicNumbers;
     protected int squaredNumber;
     protected int sqrRootNumber;
-    public float answer;
-    protected float preAnswer;
+    protected int preAnswer;
+    public int answer;
+
     [HideInInspector] public string question = "";
     [HideInInspector] public int maxIterations;
     [HideInInspector] public int iterationCount;
-    [HideInInspector] public int rightPos;
-    [HideInInspector] public int offset;
 
     [Header("UI Elements")]
     [SerializeField] internal TextMeshProUGUI questionText;
@@ -40,65 +32,55 @@ public class Skills : MonoBehaviour
     {
         isOnCooldown = false;
     }
-
     public void GenerateAnswer()
     {
-        calcTypePM = RandomOperator1();
-        calcTypeMD = RandomOperator2();
-        calcTypeSS = RandomOperator3();
-        GameManager.instance.RightAnswerPos();
-        rightPos = Random.Range(0, 3);
+        RandomOperatorPM();
+        RandomOperatorMD();
+        RandomOperatorSS();
     }
 
     public virtual void ActivateSkill()
     {
-        if (isOnCooldown)
-        {
-            return;
-        }
-        if (GameManager.instance.questionPanel != null) GameManager.instance.questionPanel.SetActive(true);
-        GameManager.instance.isCalc = true;
-        if (GameManager.instance.habilityPanel != null) GameManager.instance.habilityPanel.SetActive(false);
-        GameManager.instance.ActivatePanel();
-
-        specialNumbers1 = Random.Range(5, 60);
-        specialNumbers2 = Random.Range(5, 60);
-        basicNumbers = Random.Range(5, 100);
+        specialNumbers1 = Random.Range(5, 61);
+        specialNumbers2 = Random.Range(5, 61);
+        basicNumbers = Random.Range(5, 101);
 
         maxIterations = 1000;
         iterationCount = 0;
         remainCooldown = roundCooldown;
 
         GenerateAnswer();
-
-        GameManager.instance.RightAnswerPos();
     }
-
-    public CalcTypePM RandomOperator1()
+    public void FinalAnswer()
     {
-        System.Array _operators = System.Enum.GetValues(typeof(CalcTypePM));
-        System.Random _random = new();
-        return (CalcTypePM)_operators.GetValue(_random.Next(_operators.Length));
+        GameManager.instance.correctAnswer = answer;
+
+        if (GameManager.instance.questionPanel != null) GameManager.instance.questionPanel.SetActive(true);
+        GameManager.instance.isCalc = true;
+        if (GameManager.instance.habilityPanel != null) GameManager.instance.habilityPanel.SetActive(false);
+        StartCoroutine(GameManager.instance.ActivatePanel());
     }
 
-    public CalcTypeMD RandomOperator2()
+    public void RandomOperatorPM()
     {
-        System.Array _operators = System.Enum.GetValues(typeof(CalcTypeMD));
-        System.Random _random = new();
-        return (CalcTypeMD)_operators.GetValue(_random.Next(_operators.Length));
+        calcPM = Random.Range(0, 2);
     }
 
-    public CalcTypeSS RandomOperator3()
+    public void RandomOperatorMD()
     {
-        System.Array _operators = System.Enum.GetValues(typeof(CalcTypeSS));
-        System.Random _random = new();
-        return (CalcTypeSS)_operators.GetValue(_random.Next(_operators.Length));
+        calcMD = Random.Range(0, 2);
     }
+
+    public void RandomOperatorSS()
+    {
+        calcSS = Random.Range(0, 2);
+    }
+
     public void UpdateCooldown()
     {
         if (remainCooldown > 0)
         {
-            remainCooldown -= 1;
+            remainCooldown--;
             if (remainCooldown <= 0)
             {
                 isOnCooldown = false;

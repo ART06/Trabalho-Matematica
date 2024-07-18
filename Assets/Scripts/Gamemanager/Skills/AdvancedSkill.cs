@@ -8,6 +8,7 @@ public class AdvancedSkill : Skills
     public Button advanced;
     public TextMeshProUGUI cooldownText;
     public GameObject cooldownPanel;
+
     public override void Start()
     {
         base.Start();
@@ -34,103 +35,95 @@ public class AdvancedSkill : Skills
         {
             calculationSuccessful = true;
             iterationCount = 0;
-            sqrRootNumber = Random.Range(4, 100);
-            squaredNumber = Random.Range(2, 20);
+            sqrRootNumber = Random.Range(4, 101);
+            squaredNumber = Random.Range(2, 21);
             int root;
 
-            switch (calcTypeSS)
+            if (calcSS == 0)
             {
-                case CalcTypeSS.SqrRoot:
-                    while (true)
+                while (true)
+                {
+                    root = (int)Mathf.Sqrt(sqrRootNumber);
+                    if (root * root == sqrRootNumber)
                     {
-                        root = (int)Mathf.Sqrt(sqrRootNumber);
-                        if (root * root == sqrRootNumber)
-                        {
-                            specialNumbers1 = root;
-                            question = $"√{sqrRootNumber}";
-                            break;
-                        }
-                        iterationCount++;
-                        if (iterationCount >= maxIterations)
-                        {
-                            Debug.Log("Loop infinito evitado, tentando novamente...");
-                            calculationSuccessful = false;
-                            break;
-                        }
-                        sqrRootNumber = Random.Range(4, 100);
+                        specialNumbers1 = root;
+                        question = $"√{sqrRootNumber}";
+                        break;
                     }
-                    break;
-                case CalcTypeSS.Squared:
-                    specialNumbers1 = (int)Mathf.Pow(squaredNumber, 2);
-                    question = $"{squaredNumber}²";
-                    break;
+                    iterationCount++;
+                    if (iterationCount >= maxIterations)
+                    {
+                        calculationSuccessful = false;
+                        break;
+                    }
+                    sqrRootNumber = Random.Range(4, 101);
+                }
+            }
+            else
+            {
+                specialNumbers1 = (int)Mathf.Pow(squaredNumber, 2);
+                question = $"{squaredNumber}²";
             }
 
             if (!calculationSuccessful) continue;
 
-            switch (calcTypeMD)
+            if (calcMD == 0)
             {
-                case CalcTypeMD.Multi:
-                    question += " * ";
-                    break;
-
-                case CalcTypeMD.Division:
-                    question += " : ";
-                    break;
+                question += " * ";
+            }
+            else
+            {
+                question += " : ";
             }
 
-            calcTypeSS = RandomOperator3();
-            sqrRootNumber = Random.Range(4, 100);
-            squaredNumber = Random.Range(2, 20);
+            RandomOperatorSS();
+            sqrRootNumber = Random.Range(4, 101);
+            squaredNumber = Random.Range(2, 21);
 
-            switch (calcTypeSS)
+            if (calcSS == 0)
             {
-                case CalcTypeSS.SqrRoot:
-                    while (true)
+                while (true)
+                {
+                    root = (int)Mathf.Sqrt(sqrRootNumber);
+                    if (root * root == sqrRootNumber)
                     {
-                        root = (int)Mathf.Sqrt(sqrRootNumber);
-                        if (root * root == sqrRootNumber)
-                        {
-                            specialNumbers2 = root;
-                            question += $"√{sqrRootNumber}";
-                            break;
-                        }
-
-                        iterationCount++;
-                        if (iterationCount >= maxIterations)
-                        {
-                            Debug.Log("Loop infinito evitado, tentando novamente...");
-                            calculationSuccessful = false;
-                            break;
-                        }
-                        sqrRootNumber = Random.Range(4, 100);
+                        specialNumbers2 = root;
+                        question += $"√{sqrRootNumber}";
+                        break;
                     }
-                    break;
-                case CalcTypeSS.Squared:
-                    specialNumbers2 = (int)Mathf.Pow(squaredNumber, 2);
-                    question += $"{squaredNumber}²";
-                    break;
+
+                    iterationCount++;
+                    if (iterationCount >= maxIterations)
+                    {
+                        calculationSuccessful = false;
+                        break;
+                    }
+                    sqrRootNumber = Random.Range(4, 101);
+                }
+            }
+            else
+            {
+                specialNumbers2 = (int)Mathf.Pow(squaredNumber, 2);
+                question += $"{squaredNumber}²";
             }
 
             if (!calculationSuccessful) continue;
 
-            if (calcTypeMD == CalcTypeMD.Multi)
+            if (calcMD == 0)
             {
                 preAnswer = specialNumbers1 * specialNumbers2;
             }
-            else if (calcTypeMD == CalcTypeMD.Division)
+            else
             {
                 while (true)
                 {
                     if (specialNumbers2 == 0)
                     {
-                        Debug.Log("Divisão por zero evitada, tentando novamente...");
                         calculationSuccessful = false;
                         break;
                     }
                     if (specialNumbers1 % specialNumbers2 != 0)
                     {
-                        Debug.Log("Divisão inexata, tentando novamente...");
                         calculationSuccessful = false;
                         break;
                     }
@@ -142,28 +135,28 @@ public class AdvancedSkill : Skills
                     iterationCount++;
                     if (iterationCount >= maxIterations)
                     {
-                        Debug.Log("Loop infinito evitado, tentando novamente...");
                         calculationSuccessful = false;
                         break;
                     }
-                    squaredNumber = Random.Range(2, 20);
+                    squaredNumber = Random.Range(2, 21);
                     specialNumbers1 = (int)Mathf.Pow(squaredNumber, 2);
                 }
             }
-        } while (!calculationSuccessful);
-
-        switch (calcTypePM)
-        {
-            case CalcTypePM.Plus:
-                answer = preAnswer + basicNumbers;
-                questionText.text = $"{question} + {basicNumbers} = ?";
-                break;
-            case CalcTypePM.Minus:
-                answer = preAnswer - basicNumbers;
-                questionText.text = $"{question} - {basicNumbers} = ?";
-                break;
         }
+        while (!calculationSuccessful) ;
+        if (calcPM == 0)
+        {
+            answer = preAnswer + basicNumbers;
+            questionText.text = $"{question} + {basicNumbers} = ?";
+        }
+        else
+        {
+            answer = preAnswer - basicNumbers;
+            questionText.text = $"{question} - {basicNumbers} = ?";
+        }
+        FinalAnswer();
     }
+
     public void OnTurnEnd()
     {
         if (isOnCooldown)

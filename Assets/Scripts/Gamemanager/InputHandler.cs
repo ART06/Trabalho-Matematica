@@ -6,6 +6,7 @@ public class InputHandler : MonoBehaviour
     [Header("UI Elements")]
     protected Player player;
     protected Enemy enemy;
+    public bool wrongAnswer;
 
     protected void Start()
     {
@@ -35,6 +36,7 @@ public class InputHandler : MonoBehaviour
     public void ValidateInput(string buttonText)
     {
         GameManager.instance.skills.question = "";
+        GameManager.instance.skills.answer.ToString("");
 
         if (GameManager.instance.habilityPanel != null)
         {
@@ -42,15 +44,11 @@ public class InputHandler : MonoBehaviour
             GameManager.instance.isCalc = false;
 
             GameManager.instance.OnTurnEnd();
+            enemy.OnTurnEnd();
         }
+        if (!int.TryParse(buttonText, out int _answer)) return;
 
-        if (!int.TryParse(buttonText, out int _answer))
-        {
-            Debug.LogError("Failed to parse buttonText to int");
-            return;
-        }
-
-        if (_answer == GameManager.instance.skills.answer)
+        if (_answer == GameManager.instance.correctAnswer)
         {
             if (GameManager.instance.character != null) GameManager.instance.playerTurn = false;
             StartCoroutine(enemy.WaitBossAction());
@@ -72,7 +70,7 @@ public class InputHandler : MonoBehaviour
                 GameManager.instance.advancedSkill.isAdvanced = false;
             }
         }
-        else if (_answer != GameManager.instance.skills.answer || GameManager.instance.remainTime <= 0)
+        else if (_answer != GameManager.instance.skills.answer || wrongAnswer)
         {
             if (GameManager.instance.character != null) GameManager.instance.playerTurn = false;
             StartCoroutine(enemy.WaitBossAction());
@@ -80,6 +78,7 @@ public class InputHandler : MonoBehaviour
             GameManager.instance.advancedSkill.isAdvanced = false;
             GameManager.instance.basicSkill.isBasic = false;
             GameManager.instance.healSkill.isHeal = false;
+            wrongAnswer = false;
         }
     }
     public IEnumerator PlayerDoubleDmg()

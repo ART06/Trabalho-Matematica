@@ -20,7 +20,7 @@ public class LifeCtrl : MonoBehaviour
     public bool dead;
     public bool canHeal;
     
-    protected bool isShielded;
+    [HideInInspector] public bool isShielded;
     public int shield;
     public int shieldValue;
     public int maxShield;
@@ -36,8 +36,12 @@ public class LifeCtrl : MonoBehaviour
     public virtual void Start()
     {
         isShielded = false;
-        maxShield = maxHealth;
         shieldBar.gameObject.SetActive(false);
+    }
+    public void Update()
+    {
+        shieldBar.fillAmount = Mathf.Lerp(shieldBar.fillAmount, (float)shield / maxShield, 0.1f);
+        healthBar.fillAmount = Mathf.Lerp(healthBar.fillAmount, (float)health / maxHealth, 0.1f);
     }
     public virtual void Die()
     {
@@ -49,20 +53,34 @@ public class LifeCtrl : MonoBehaviour
     {
         if (dead) return;
 
-        health = Mathf.Max(health - _dmg, 0);
         lifeAnim.SetTrigger("Hurt");
 
-        if (isShielded) shieldBar.fillAmount = (float)shield / maxShield;
-        else healthBar.fillAmount = (float)health / maxHealth;
+        if (isShielded)
+        {
+            shield = Mathf.Max(shield - _dmg, 0);
+        }
+        else
+        {
+            health = Mathf.Max(health - _dmg, 0);
+        }
 
-        if (health <= 0) healthBar.fillAmount = 0;
-        if (health == 0) Die();
+        if (health == 0)
+        {
+            healthBar.fillAmount = 0;
+            Die();
+        }
     }
     public virtual void GetHeal(int _heal)
     {
         if (!canHeal || dead) return;
 
-        health = Mathf.Min(health + _heal, maxHealth);
-        healthBar.fillAmount = (float)health / maxHealth;
+        if (isShielded)
+        {
+            shield = Mathf.Min(shield + _heal, maxShield);
+        }
+        else
+        {
+            health = Mathf.Min(health + _heal, maxHealth);
+        }
     }
 }

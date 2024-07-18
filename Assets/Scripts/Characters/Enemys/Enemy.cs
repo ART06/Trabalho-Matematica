@@ -14,9 +14,10 @@ public class Enemy : Character
     public Animator specAnim;
     public TextMeshProUGUI cooldownText;
     public GameObject cooldownPanel;
+    public GameObject enemySkill;
 
     [Header("Game State Variables")]
-    [HideInInspector] public bool specIsOnCooldown;
+    public bool specIsOnCooldown;
     protected int randomAction;
 
     protected virtual void Start()
@@ -44,6 +45,11 @@ public class Enemy : Character
             GameManager.instance.enemyTurn = true;
         }
     }
+    public virtual void BossRound()
+    {
+        randomAction = Random.Range(0, 11);
+        GameManager.instance.enemyTurn = false;
+    }
     public IEnumerator EnemyDoubleDmg()
     {
         enemy.atqDmg *= 2;
@@ -63,6 +69,8 @@ public class Enemy : Character
             if (cooldownText != null) cooldownText.text = remainCooldown.ToString();
             if (remainCooldown <= 0)
             {
+                if (enemy != null)
+                    enemySkill.SetActive(true);
                 if (cooldownPanel != null)
                     cooldownPanel.SetActive(false);
                 specIsOnCooldown = false;
@@ -72,6 +80,18 @@ public class Enemy : Character
         {
             specIsOnCooldown = false;
             remainCooldown = 0;
+        }
+    }
+    public void UpdateCooldown()
+    {
+        if (remainCooldown > 0)
+        {
+            remainCooldown -= 1;
+            if (remainCooldown <= 0)
+            {
+                specIsOnCooldown = false;
+                remainCooldown = 0;
+            }
         }
     }
 }

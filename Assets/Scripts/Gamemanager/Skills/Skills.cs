@@ -54,8 +54,9 @@ public class Skills : MonoBehaviour
     public void FinalAnswer()
     {
         GameManager.instance.correctAnswer = answer;
+        GameManager.instance.IncorrectNumberGenerator();
+        GameManager.instance.RightAnswerPos();
 
-        if (GameManager.instance.questionPanel != null) GameManager.instance.questionPanel.SetActive(true);
         GameManager.instance.isCalc = true;
         if (GameManager.instance.habilityPanel != null) GameManager.instance.habilityPanel.SetActive(false);
         StartCoroutine(GameManager.instance.ActivatePanel());

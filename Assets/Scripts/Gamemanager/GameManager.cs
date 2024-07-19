@@ -200,18 +200,12 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < falseAnswer.Length; i++)
         {
-            offset = Random.Range(50, 151);
+            offset = Random.Range(10, 101);
 
             if (Random.value > 0.5f)
-            {
                 falseAnswer[i] = (int)correctAnswer + offset;
-                Debug.Log("adiconando " + offset + " na resposta incorreta");
-            }
             else
-            {
                 falseAnswer[i] = (int)correctAnswer - offset;
-                Debug.Log("retirando " + offset + " da resposta incorreta");
-            }
 
             if (falseAnswer[i] == correctAnswer)
                 falseAnswer[i] += offset;
@@ -258,12 +252,12 @@ public class GameManager : MonoBehaviour
         do rightPos = Random.Range(0, 3);
         while (rightPos == lastRightPos);
         lastRightPos = rightPos;
-        
-        IncorrectNumberGenerator();
-        RightAnswerPos();
-        yield return new WaitForSeconds(1f);
+
         if (battlePanel != null)
             battlePanel.SetActive(true);
+        
+        yield return new WaitForSeconds(0.2f);
+        if (GameManager.instance.questionPanel != null) GameManager.instance.questionPanel.SetActive(true);
     }
 
     public void OnBossDeath(Enemy boss)

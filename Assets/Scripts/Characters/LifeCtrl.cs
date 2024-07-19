@@ -20,7 +20,7 @@ public class LifeCtrl : MonoBehaviour
     public bool dead;
     public bool canHeal;
     
-    [HideInInspector] public bool isShielded;
+    public bool isShielded;
     public int shield;
     public int shieldValue;
     public int maxShield;
@@ -31,12 +31,12 @@ public class LifeCtrl : MonoBehaviour
         character = GetComponent<Character>();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         enemy = GetComponent<Enemy>();
-        health = maxHealth;
     }
     public virtual void Start()
     {
         isShielded = false;
-        shieldBar.gameObject.SetActive(false);
+        health = maxHealth;
+        maxShield = maxHealth;
     }
     public void Update()
     {
@@ -57,10 +57,12 @@ public class LifeCtrl : MonoBehaviour
 
         if (isShielded)
         {
+            Debug.Log("dano no escudo");
             shield = Mathf.Max(shield - _dmg, 0);
         }
         else
         {
+            Debug.Log("dano na vida");
             health = Mathf.Max(health - _dmg, 0);
         }
 
@@ -72,14 +74,16 @@ public class LifeCtrl : MonoBehaviour
     }
     public virtual void GetHeal(int _heal)
     {
-        if (!canHeal || dead) return;
+        if (dead) return;
 
         if (isShielded)
         {
+            Debug.Log("cura do escudo");
             shield = Mathf.Min(shield + _heal, maxShield);
         }
         else
         {
+            Debug.Log("cura na vida");
             health = Mathf.Min(health + _heal, maxHealth);
         }
     }

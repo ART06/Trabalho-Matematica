@@ -3,16 +3,16 @@ using UnityEngine;
 
 public class FirstBoss : Enemy
 {
-    public bool firstBoss;
+    public bool fBoss;
 
     protected override void Start()
     {
         base.Start();
-        firstBoss = true;
+        fBoss = true;
     }
     public void FixedUpdate()
     {
-        if (DistanceToPlayer() <= atqRange && firstBoss) GameManager.instance.isFighting = true;
+        if (DistanceToPlayer() <= atqRange && fBoss) GameManager.instance.isFighting = true;
         if (GameManager.instance.enemyTurn) BossRound();
     }
     public override void BossRound()
@@ -23,12 +23,12 @@ public class FirstBoss : Enemy
             
             if (randomAction <= 5)
             {
-                if (enemy != null) enemy.anim.SetTrigger("Attack");
+                if (enemy != null) anim.SetTrigger("Attack");
                 Invoke("ActiveHabPanel", 1f);
             }
             else if (randomAction == 6 || randomAction == 7)
             {
-                if (enemy != null) enemy.anim.SetTrigger("Crit Atk");
+                if (enemy != null) anim.SetTrigger("Crit Atk");
                 if (enemy != null) critAnim.SetTrigger("Crit");
                 StartCoroutine(nameof(EnemyDoubleDmg));
                 Invoke("ActiveHabPanel", 1f);
@@ -47,14 +47,36 @@ public class FirstBoss : Enemy
     public IEnumerator HealEvent()
     {
         if (enemy != null) specAnim.SetTrigger("Heal");
-        Invoke("ActiveHabPanel", 1f);
         yield return new WaitForSeconds(0.5f);
         Life.GetHeal(Life.healValue);
+        Invoke("ActiveHabPanel", 1f);
     }
     public override void Death()
     {
         base.Death();
-        firstBoss = false;
+        fBoss = false;
         GameManager.instance.OnBossDeath(this);
+    }
+    public void OnTurnEnd()
+    {
+        Debug.Log("passou turno");
+        if (specIsOnCooldown)
+        {
+            remainCooldown--;
+            if (cooldownText != null) cooldownText.text = remainCooldown.ToString();
+            if (remainCooldown <= 0)
+            {
+                if (enemy != null)
+                    enemySkill.SetActive(true);
+                if (cooldownPanel != null)
+                    cooldownPanel.SetActive(false);
+                specIsOnCooldown = false;
+            }
+        }
+        else
+        {
+            specIsOnCooldown = false;
+            remainCooldown = 0;
+        }
     }
 }

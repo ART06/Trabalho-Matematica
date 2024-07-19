@@ -44,7 +44,6 @@ public class InputHandler : MonoBehaviour
             GameManager.instance.isCalc = false;
 
             GameManager.instance.OnTurnEnd();
-            enemy.OnTurnEnd();
         }
         if (!int.TryParse(buttonText, out int _answer)) return;
 

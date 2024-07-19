@@ -653,6 +653,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd668514524c591429f9f38acc8cae11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemy: {fileID: 0}
   character: {fileID: 0}
   player: {fileID: 0}
   inputhandler: {fileID: 0}
@@ -670,6 +671,8 @@ MonoBehaviour:
   remainTime: 0
   rightPos: 0
   correctAnswer: 0
+  offset: 0
+  lastRightPos: 0
   maxTime: 30
   enemyTurn: 0
   playerTurn: 0
@@ -734,7 +737,6 @@ MonoBehaviour:
   question: 
   maxIterations: 0
   iterationCount: 0
-  offset: 0
   questionText: {fileID: 327626804}
   roundCooldown: 0
   remainCooldown: 0
@@ -756,7 +758,6 @@ MonoBehaviour:
   question: 
   maxIterations: 0
   iterationCount: 0
-  offset: 0
   questionText: {fileID: 327626804}
   roundCooldown: 4
   remainCooldown: 0
@@ -782,7 +783,6 @@ MonoBehaviour:
   question: 
   maxIterations: 0
   iterationCount: 0
-  offset: 0
   questionText: {fileID: 327626804}
   roundCooldown: 3
   remainCooldown: 0
@@ -808,7 +808,6 @@ MonoBehaviour:
   question: 
   maxIterations: 0
   iterationCount: 0
-  offset: 0
   questionText: {fileID: 327626804}
   roundCooldown: 0
   remainCooldown: 0
@@ -4191,7 +4190,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
-  m_FillAmount: 1
+  m_FillAmount: 0
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0

@@ -7,6 +7,9 @@ using UnityEngine.TextCore.Text;
 public class Enemy : Character
 {
     [Header("UI Elements")]
+    [HideInInspector] public FirstBoss firstEnemy;
+    [HideInInspector] public SecondBoss secondEnemy;
+    [HideInInspector] public ThirdBoss thirdEnemy;
     public int roundCooldown;
     public int remainCooldown;
     protected InputHandler input;
@@ -22,6 +25,10 @@ public class Enemy : Character
 
     protected virtual void Start()
     {
+        firstEnemy = GetComponent<FirstBoss>();
+        secondEnemy = GetComponent<SecondBoss>();
+        thirdEnemy = GetComponent<ThirdBoss>();
+
         input = GetComponent<InputHandler>();
         if (cooldownPanel != null)
             cooldownPanel.SetActive(false);
@@ -36,12 +43,12 @@ public class Enemy : Character
     {
         if (GameManager.instance.healSkill.isHeal)
         {
-            yield return new WaitForSeconds(4f);
+            yield return new WaitForSeconds(5f);
             GameManager.instance.enemyTurn = true;
         }
         else
         {
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(3f);
             GameManager.instance.enemyTurn = true;
         }
     }
@@ -49,6 +56,7 @@ public class Enemy : Character
     {
         randomAction = Random.Range(0, 11);
         GameManager.instance.enemyTurn = false;
+        Debug.Log(randomAction);
     }
     public IEnumerator EnemyDoubleDmg()
     {
@@ -60,27 +68,6 @@ public class Enemy : Character
     {
         GameManager.instance.habilityPanel.SetActive(true);
         if (GameManager.instance.character != null) GameManager.instance.playerTurn = true;
-    }
-    public void OnTurnEnd()
-    {
-        if (specIsOnCooldown)
-        {
-            remainCooldown--;
-            if (cooldownText != null) cooldownText.text = remainCooldown.ToString();
-            if (remainCooldown <= 0)
-            {
-                if (enemy != null)
-                    enemySkill.SetActive(true);
-                if (cooldownPanel != null)
-                    cooldownPanel.SetActive(false);
-                specIsOnCooldown = false;
-            }
-        }
-        else
-        {
-            specIsOnCooldown = false;
-            remainCooldown = 0;
-        }
     }
     public void UpdateCooldown()
     {

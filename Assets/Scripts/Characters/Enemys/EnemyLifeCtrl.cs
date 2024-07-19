@@ -5,16 +5,6 @@ using UnityEngine.UI;
 
 public class EnemyLifeCtrl : LifeCtrl
 {
-    #region Variables
-
-    #endregion
-
-    #region Unity Methods
-
-
-
-    #endregion
-
     #region Life Control
     public override void Die()
     {

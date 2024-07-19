@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public static GameManager instance;
 
     [Header("Player and Enemy References")]
-    protected Enemy enemy;
+    [HideInInspector] public Enemy enemy;
     [HideInInspector] public Character character;
     [HideInInspector] public Player player;
     [HideInInspector] public InputHandler inputhandler;
@@ -96,13 +96,11 @@ public class GameManager : MonoBehaviour
                 falseAnswerIsGenerated = false;
             }
             CombatManager();
-
-            if (isCalc)
-                CalcTimer();
-
-            UpdateCooldownTexts();
-            skills.UpdateCooldown();
-            enemy.UpdateCooldown();
+        }
+        else
+        {
+            ResetCombatState();
+            falseAnswerIsGenerated = false;
         }
     }
 
@@ -155,17 +153,13 @@ public class GameManager : MonoBehaviour
 
     private void CombatManager()
     {
-        if (isFighting)
-        {
-            ActivateCombatUI();
-            player.canMove = false;
-        }
-        else
-        {
-            ResetCombatState();
-            falseAnswerIsGenerated = false;
-        }
-
+        ActivateCombatUI();
+        player.canMove = false;
+        if (isCalc)
+            CalcTimer();
+        UpdateCooldownTexts();
+        skills.UpdateCooldown();
+        enemy.UpdateCooldown();
         if (player.IsDead())
             battlePanel.SetActive(false);
     }
@@ -186,8 +180,8 @@ public class GameManager : MonoBehaviour
         habilityPanel.SetActive(true);
         remainTime = maxTime;
         enemyTurn = false;
-        battlePanel.SetActive(false);
         enemy.Life.healthBar.fillAmount = 1f;
+        enemy.Life.shieldBar.fillAmount = 0;
     }
 
     public void CalcTimer()
@@ -262,13 +256,13 @@ public class GameManager : MonoBehaviour
 
     public void OnBossDeath(Enemy boss)
     {
+        enemy.specIsOnCooldown = false;
         maxTime += 2;
         isFighting = false;
         player.canMove = true;
-        battlePanel.SetActive(false);
         playerTurn = false;
         enemyTurn = false;
-
+        battlePanel.SetActive(false);
         inputhandler.UpdateCurrentEnemy();
 
         if (boss is FirstBoss)
@@ -305,5 +299,7 @@ public class GameManager : MonoBehaviour
         playerTurn = false;
         healSkill.OnTurnEnd();
         advancedSkill.OnTurnEnd();
+        if (enemy.firstEnemy != null) enemy.firstEnemy.OnTurnEnd();
+        if (enemy.secondEnemy != null) enemy.secondEnemy.OnTurnEnd();
     }
 }

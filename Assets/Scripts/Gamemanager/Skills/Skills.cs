@@ -58,8 +58,8 @@ public class Skills : MonoBehaviour
         GameManager.instance.RightAnswerPos();
 
         GameManager.instance.isCalc = true;
-        if (GameManager.instance.habilityPanel != null) GameManager.instance.habilityPanel.SetActive(false);
         StartCoroutine(GameManager.instance.ActivatePanel());
+        if (GameManager.instance.habilityPanel != null) GameManager.instance.habilityPanel.SetActive(false);
     }
 
     public void RandomOperatorPM()

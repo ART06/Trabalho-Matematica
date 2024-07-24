@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerLifeCtrl : LifeCtrl
@@ -15,14 +16,19 @@ public class PlayerLifeCtrl : LifeCtrl
         base.Start();
         sprite = GetComponentInChildren<SpriteRenderer>();
     }
+    public override void Update()
+    {
+        base.Update();
+        if (dead && Input.anyKeyDown) SceneManager.LoadScene(1);
+    }
     #endregion
 
     #region Life Control
     public override void TakeDmg(int _dmg)
     {
         base.TakeDmg(_dmg);
-        if (!dead || !player.isFreeze)
-            StartCoroutine(nameof(DmgEffect));
+        if (dead || player.isFreeze) return;
+        StartCoroutine(nameof(DmgEffect));
     }
 
     public override void Die()
@@ -37,6 +43,8 @@ public class PlayerLifeCtrl : LifeCtrl
     #region Private Methods
     IEnumerator DmgEffect()
     {
+        if (player.isFreeze) yield return null;
+
         for (int i = 0; i < 5; i++)
         {
             sprite.enabled = false;

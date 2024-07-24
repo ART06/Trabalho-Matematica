@@ -40,7 +40,6 @@ public class FirstBoss : Enemy
             }
             else
             {
-                Debug.Log("reroll");
                 GameManager.instance.enemyTurn = true;
                 enemy.BossRound();
             }

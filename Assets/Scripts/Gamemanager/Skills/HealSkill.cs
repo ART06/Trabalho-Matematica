@@ -104,10 +104,5 @@ public class HealSkill : Skills
                 isOnCooldown = false;
             }
         }
-        else
-        {
-            isOnCooldown = false;
-            remainCooldown = 0;
-        }
     }
 }

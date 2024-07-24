@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using TMPro;
 using UnityEditor;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,6 +19,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public BasicSkill basicSkill;
     [HideInInspector] public HealSkill healSkill;
     [HideInInspector] public AdvancedSkill advancedSkill;
+    [HideInInspector] public MenuManager menuManager;
 
     [Header("Boss References")]
     [HideInInspector] public FirstBoss fb;
@@ -124,6 +124,7 @@ public class GameManager : MonoBehaviour
 
     private void InitializeComponents()
     {
+        menuManager = GetComponent<MenuManager>();
         advancedSkill = GetComponent<AdvancedSkill>();
         inputhandler = GetComponent<InputHandler>();
         basicSkill = GetComponent<BasicSkill>();
@@ -170,8 +171,10 @@ public class GameManager : MonoBehaviour
 
         if (battleUI != null)
             battleUI.SetActive(true);
-
-        playerTurn = true;
+        if (enemyTurn)
+            playerTurn = false;
+        else
+            playerTurn = true;
     }
 
     private void ResetCombatState()
@@ -258,6 +261,7 @@ public class GameManager : MonoBehaviour
     {
         healSkill.remainCooldown = 0;
         advancedSkill.remainCooldown = 0;
+        OnTurnEnd();
 
         maxTime += 2;
         isFighting = false;
@@ -298,7 +302,6 @@ public class GameManager : MonoBehaviour
 
     public void OnTurnEnd()
     {
-        playerTurn = false;
         healSkill.OnTurnEnd();
         advancedSkill.OnTurnEnd();
     }

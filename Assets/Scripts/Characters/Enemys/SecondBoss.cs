@@ -26,18 +26,17 @@ public class SecondBoss : Enemy
                 if (enemy != null) anim.SetTrigger("Attack");
                 Invoke("ActiveHabPanel", 1.5f);
             }
-            else if (randomAction >= 6 && Life.shield < Life.maxHealth ||
-                randomAction <= 8 && Life.shield < Life.maxHealth)
+            else if (randomAction == 6 && Life.shield < Life.maxHealth ||
+                randomAction == 7 && Life.shield < Life.maxHealth)
             {
                 StartCoroutine(ShieldHeal());
             }
-            else if (randomAction >= 9)
+            else if (randomAction >= 8)
             {
                 StartCoroutine(nameof(CritEvent));
             }
             else
             {
-                Debug.Log("reroll");
                 GameManager.instance.enemyTurn = true;
                 enemy.BossRound();
             }

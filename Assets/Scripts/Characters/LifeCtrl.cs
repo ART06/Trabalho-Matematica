@@ -50,7 +50,7 @@ public class LifeCtrl : MonoBehaviour
         InitializeShieldBar(maxShield);
     }
 
-    public void Update()
+    public virtual void Update()
     {
         UpdateHealthBar();
         UpdateShieldBar();
@@ -68,9 +68,6 @@ public class LifeCtrl : MonoBehaviour
     {
         if (dead) return;
 
-        if (!isShielded || !player.isFreeze)
-            lifeAnim.SetTrigger("Hurt");
-
         if (isShielded)
         {
             UpdateShieldBar();
@@ -78,6 +75,9 @@ public class LifeCtrl : MonoBehaviour
         }
         else
         {
+            if (!player.isFreeze)
+                lifeAnim.SetTrigger("Hurt");
+            
             UpdateHealthBar();
             health = Mathf.Max(health - _dmg, 0);
         }
@@ -103,7 +103,6 @@ public class LifeCtrl : MonoBehaviour
             health = Mathf.Min(health + _heal, maxHealth);
         }
     }
-
     // Inicialize a barra de vida segmentada
     public void InitializeHealthBar(int maxHealth)
     {
@@ -144,7 +143,7 @@ public class LifeCtrl : MonoBehaviour
                 if (barImage != null)
                 {
                     // Determine se a barrinha deve estar cheia ou vazia
-                    barImage.fillAmount = i < health ? 1 : 0;
+                    barImage.color = i < health ? Color.green : Color.red;
                 }
             }
         }

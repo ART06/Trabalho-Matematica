@@ -172,10 +172,5 @@ public class AdvancedSkill : Skills
                 isOnCooldown = false;
             }
         }
-        else
-        {
-            isOnCooldown = false;
-            remainCooldown = 0;
-        }
     }
 }

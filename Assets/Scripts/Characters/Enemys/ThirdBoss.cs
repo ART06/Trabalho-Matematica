@@ -23,41 +23,40 @@ public class ThirdBoss : Enemy
         {
             base.BossRound();
             
-            if (randomAction <= 5)
+            if (randomAction <= 6)
             {
                 alreadyFreezed = false;
                 player.isFreeze = false;
                 if (enemy != null) anim.SetTrigger("Attack");
                 Invoke("ActiveHabPanel", 1.5f);
             }
-            else if (randomAction >= 6 && !alreadyFreezed || randomAction <= 8 && !alreadyFreezed)
+            else if (randomAction == 7 && !alreadyFreezed || randomAction == 8 && !alreadyFreezed)
             {
-                alreadyFreezed = true;
-                player.isFreeze = true;
-                if (enemy != null) anim.SetTrigger("Spec");
-                Invoke(nameof(enemy.BossRound), 3f);
-                GameManager.instance.enemyTurn = true;
+                StartCoroutine(nameof(FreezeEvent));
             }
-            else if (randomAction >=9)
+            else if (randomAction >= 9)
             {
                 alreadyFreezed = false;
                 player.isFreeze = false;
-                StartCoroutine(nameof(CritEvent));
+                if (enemy != null) anim.SetTrigger("Crit Atk");
+                Invoke("ActiveHabPanel", 1.5f);
             }
             else
             {
-                Debug.Log("reroll");
                 GameManager.instance.enemyTurn = true;
                 enemy.BossRound();  
             }
         }
     }
-    public IEnumerator CritEvent()
+    public IEnumerator FreezeEvent()
     {
-        if (enemy != null) anim.SetTrigger("Attack");
-        yield return new WaitForSeconds(1f);
-        if (enemy != null) anim.SetTrigger("Crit Atk");
-        Invoke("ActiveHabPanel", 1.5f);
+        if (enemy != null) anim.SetTrigger("Spec");
+        yield return new WaitForSeconds(0.5f);
+        alreadyFreezed = true;
+        player.isFreeze = true;
+        yield return new WaitForSeconds(2f);
+        GameManager.instance.enemyTurn = true;
+        enemy.BossRound();
     }
     public override void Death()
     {

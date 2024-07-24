@@ -10,7 +10,7 @@ public class EnemyLifeCtrl : LifeCtrl
     {
         base.Die();
         enemy.anim.SetBool("Death", true);
-        Invoke(nameof(Deactivate), 1f);
+        Invoke(nameof(Deactivate), 1.5f);
     }
     #endregion
 

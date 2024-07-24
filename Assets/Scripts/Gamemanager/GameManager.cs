@@ -38,8 +38,8 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public int lastRightPos;
 
     public float maxTime;
-    [HideInInspector] public bool enemyTurn;
-    [HideInInspector] public bool playerTurn;
+    public bool enemyTurn;
+    public bool playerTurn;
 
     [Header("UI Elements")]
     public Image timerBar;
@@ -159,7 +159,6 @@ public class GameManager : MonoBehaviour
             CalcTimer();
         UpdateCooldownTexts();
         skills.UpdateCooldown();
-        enemy.UpdateCooldown();
         if (player.IsDead())
             battlePanel.SetActive(false);
     }
@@ -180,14 +179,15 @@ public class GameManager : MonoBehaviour
         habilityPanel.SetActive(true);
         remainTime = maxTime;
         enemyTurn = false;
-        enemy.Life.healthBar.fillAmount = 1f;
-        enemy.Life.shieldBar.fillAmount = 0;
     }
 
     public void CalcTimer()
     {
         remainTime -= Time.deltaTime;
         timerBar.fillAmount = remainTime / maxTime;
+
+        if (remainTime <= 0)
+            instance.inputhandler.HandleIncorrectAnswerOrTimeout();
     }
 
     public void IncorrectNumberGenerator()
@@ -242,38 +242,43 @@ public class GameManager : MonoBehaviour
     public IEnumerator ActivatePanel()
     {
         remainTime = maxTime + 0.2f;
-        
+
         do rightPos = Random.Range(0, 3);
         while (rightPos == lastRightPos);
         lastRightPos = rightPos;
 
         if (battlePanel != null)
             battlePanel.SetActive(true);
-        
+
         yield return new WaitForSeconds(0.2f);
         if (GameManager.instance.questionPanel != null) GameManager.instance.questionPanel.SetActive(true);
     }
 
     public void OnBossDeath(Enemy boss)
     {
-        enemy.specIsOnCooldown = false;
+        healSkill.remainCooldown = 0;
+        advancedSkill.remainCooldown = 0;
+
         maxTime += 2;
         isFighting = false;
+        
         player.canMove = true;
         playerTurn = false;
         enemyTurn = false;
-        battlePanel.SetActive(false);
+        
         inputhandler.UpdateCurrentEnemy();
-
+        
         if (boss is FirstBoss)
             StartCoroutine(ActivateNextBoss(secondBoss));
         else if (boss is SecondBoss)
             StartCoroutine(ActivateNextBoss(thirdBoss));
+        
+        battlePanel.SetActive(false);
     }
 
     private IEnumerator ActivateNextBoss(GameObject nextBoss)
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
 
         if (nextBoss != null)
         {
@@ -289,9 +294,6 @@ public class GameManager : MonoBehaviour
 
         if (healSkill != null && healSkill.cooldownText != null)
             healSkill.cooldownText.text = healSkill.remainCooldown > 0 ? healSkill.remainCooldown.ToString() : "";
-
-        if (enemy != null && enemy.cooldownText != null)
-            enemy.cooldownText.text = enemy.remainCooldown > 0 ? enemy.remainCooldown.ToString() : "";
     }
 
     public void OnTurnEnd()
@@ -299,7 +301,5 @@ public class GameManager : MonoBehaviour
         playerTurn = false;
         healSkill.OnTurnEnd();
         advancedSkill.OnTurnEnd();
-        if (enemy.firstEnemy != null) enemy.firstEnemy.OnTurnEnd();
-        if (enemy.secondEnemy != null) enemy.secondEnemy.OnTurnEnd();
     }
 }

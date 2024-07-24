@@ -20,63 +20,43 @@ public class FirstBoss : Enemy
         if (GameManager.instance.isFighting && GameManager.instance.enemyTurn)
         {
             base.BossRound();
-            
+
             if (randomAction <= 5)
             {
                 if (enemy != null) anim.SetTrigger("Attack");
-                Invoke("ActiveHabPanel", 1f);
+                Invoke("ActiveHabPanel", 1.5f);
             }
-            else if (randomAction == 6 || randomAction == 7)
+            else if (randomAction >= 6 && Life.health < Life.maxHealth ||
+                randomAction <= 8 && Life.health < Life.maxHealth)
+            {
+                StartCoroutine(HealEvent());
+            }
+            else if (randomAction >= 9)
             {
                 if (enemy != null) anim.SetTrigger("Crit Atk");
                 if (enemy != null) critAnim.SetTrigger("Crit");
                 StartCoroutine(nameof(EnemyDoubleDmg));
-                Invoke("ActiveHabPanel", 1f);
+                Invoke("ActiveHabPanel", 1.5f);
             }
-            else if (randomAction >= 8 && Life.health < Life.maxHealth && !specIsOnCooldown)
+            else
             {
-                StartCoroutine(HealEvent());
-                remainCooldown = roundCooldown;
-                specIsOnCooldown = true;
-                if (cooldownPanel != null) cooldownPanel.SetActive(true);
+                Debug.Log("reroll");
+                GameManager.instance.enemyTurn = true;
+                enemy.BossRound();
             }
-            else BossRound();
         }
-        GameManager.instance.enemyTurn = false;
     }
     public IEnumerator HealEvent()
     {
         if (enemy != null) specAnim.SetTrigger("Heal");
         yield return new WaitForSeconds(0.5f);
         Life.GetHeal(Life.healValue);
-        Invoke("ActiveHabPanel", 1f);
+        Invoke("ActiveHabPanel", 1.5f);
     }
     public override void Death()
     {
         base.Death();
         fBoss = false;
         GameManager.instance.OnBossDeath(this);
-    }
-    public void OnTurnEnd()
-    {
-        Debug.Log("passou turno");
-        if (specIsOnCooldown)
-        {
-            remainCooldown--;
-            if (cooldownText != null) cooldownText.text = remainCooldown.ToString();
-            if (remainCooldown <= 0)
-            {
-                if (enemy != null)
-                    enemySkill.SetActive(true);
-                if (cooldownPanel != null)
-                    cooldownPanel.SetActive(false);
-                specIsOnCooldown = false;
-            }
-        }
-        else
-        {
-            specIsOnCooldown = false;
-            remainCooldown = 0;
-        }
     }
 }

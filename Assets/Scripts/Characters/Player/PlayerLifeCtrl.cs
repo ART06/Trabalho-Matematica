@@ -21,7 +21,8 @@ public class PlayerLifeCtrl : LifeCtrl
     public override void TakeDmg(int _dmg)
     {
         base.TakeDmg(_dmg);
-        StartCoroutine(nameof(DmgEffect));
+        if (!dead || !player.isFreeze)
+            StartCoroutine(nameof(DmgEffect));
     }
 
     public override void Die()

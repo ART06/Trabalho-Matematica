@@ -21,27 +21,27 @@ public class SecondBoss : Enemy
         {
             base.BossRound();
 
-            if (randomAction <= 4)
+            if (randomAction <= 5)
             {
-                Debug.Log("ataque basico");
                 if (enemy != null) anim.SetTrigger("Attack");
-                Invoke("ActiveHabPanel", 1f);
+                Invoke("ActiveHabPanel", 1.5f);
             }
-            else if (randomAction == 5 || randomAction == 6)
-            {
-                Debug.Log("ataque pesado/duplo");
-                StartCoroutine(nameof(CritEvent));
-            }
-            else if (randomAction >= 7 && !specIsOnCooldown)
+            else if (randomAction >= 6 && Life.shield < Life.maxHealth ||
+                randomAction <= 8 && Life.shield < Life.maxHealth)
             {
                 StartCoroutine(ShieldHeal());
-                remainCooldown = roundCooldown;
-                specIsOnCooldown = true;
-                if (cooldownPanel != null) cooldownPanel.SetActive(true);
             }
-            else BossRound();
+            else if (randomAction >= 9)
+            {
+                StartCoroutine(nameof(CritEvent));
+            }
+            else
+            {
+                Debug.Log("reroll");
+                GameManager.instance.enemyTurn = true;
+                enemy.BossRound();
+            }
         }
-        GameManager.instance.enemyTurn = false;
     }
     public IEnumerator ShieldHeal()
     {
@@ -75,27 +75,5 @@ public class SecondBoss : Enemy
         base.Death();
         sBoss = false;
         GameManager.instance.OnBossDeath(this);
-    }
-    public void OnTurnEnd()
-    {
-        Debug.Log("passou turno");
-        if (specIsOnCooldown)
-        {
-            remainCooldown--;
-            if (cooldownText != null) cooldownText.text = remainCooldown.ToString();
-            if (remainCooldown <= 0)
-            {
-                if (enemy != null)
-                    enemySkill.SetActive(true);
-                if (cooldownPanel != null)
-                    cooldownPanel.SetActive(false);
-                specIsOnCooldown = false;
-            }
-        }
-        else
-        {
-            specIsOnCooldown = false;
-            remainCooldown = 0;
-        }
     }
 }

@@ -10,7 +10,7 @@ public class Player : Character
     public int speed;
 
     public bool canMove;
-    [HideInInspector] public bool timeToAttack;
+    [HideInInspector] public bool isFreeze;
     public Animator healAnim;
 
     protected void Start()
@@ -59,5 +59,10 @@ public class Player : Character
             anim.SetFloat("VelocX", 1);
         else
             anim.SetFloat("VelocX", 0);
+
+        if (isFreeze)
+            anim.SetBool("IsFreeze", true);
+        else
+            anim.SetBool("IsFreeze", false);
     }
 }

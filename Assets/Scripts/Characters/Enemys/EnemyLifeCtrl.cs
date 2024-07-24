@@ -9,7 +9,8 @@ public class EnemyLifeCtrl : LifeCtrl
     public override void Die()
     {
         base.Die();
-        Invoke(nameof(Deactivate), 1.5f);
+        enemy.anim.SetBool("Death", true);
+        Invoke(nameof(Deactivate), 1f);
     }
     #endregion
 

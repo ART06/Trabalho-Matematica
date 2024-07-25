@@ -667,6 +667,7 @@ MonoBehaviour:
   tb: {fileID: 0}
   isFighting: 0
   isCalc: 0
+  missAtk: 0
   falseAnswerIsGenerated: 0
   answerIsGenerated: 0
   remainTime: 0
@@ -674,6 +675,7 @@ MonoBehaviour:
   correctAnswer: 0
   offset: 0
   lastRightPos: 0
+  missChance: 0
   maxTime: 30
   enemyTurn: 0
   playerTurn: 0
@@ -1810,9 +1812,9 @@ MonoBehaviour:
   canHeal: 0
   isShielded: 0
   shield: 0
-  shieldValue: 0
+  shieldValue: 1
   maxShield: 0
-  canShield: 0
+  canShield: 1
   healthBarPrefab: {fileID: 2130922999597194273, guid: 7fb78f595bd98fb4eb661f8fc2ec6f92, type: 3}
   healthBarContainer: {fileID: 1878072995}
   shieldBarPrefab: {fileID: 3906671918421053215, guid: 671ef3e9bb27f3f4ba1930eaa84c143b, type: 3}
@@ -1847,6 +1849,7 @@ Transform:
   m_Children:
   - {fileID: 21549859}
   - {fileID: 333640919}
+  - {fileID: 989390933}
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1873,9 +1876,9 @@ MonoBehaviour:
   receivingDmg: 0
   anim: {fileID: 21549856}
   critAnim: {fileID: 0}
-  specAnim: {fileID: 0}
-  thirdBoss: 0
+  specAnim: {fileID: 989390931}
   alreadyFreezed: 0
+  thirdBoss: 0
 --- !u!1 &559062878
 GameObject:
   m_ObjectHideFlags: 0
@@ -2469,8 +2472,8 @@ MonoBehaviour:
   enemy: {fileID: 0}
   lifeAnim: {fileID: 814323099}
   health: 0
-  healValue: 2
-  maxHealth: 7
+  healValue: 3
+  maxHealth: 10
   dead: 0
   canHeal: 1
   isShielded: 0
@@ -2858,6 +2861,7 @@ MonoBehaviour:
   anim: {fileID: 2110310915}
   critAnim: {fileID: 1200012988}
   specAnim: {fileID: 1341298669}
+  alreadyFreezed: 0
   fBoss: 0
 --- !u!1 &962498765
 GameObject:
@@ -2981,6 +2985,112 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 962498765}
   m_CullTransparentMesh: 1
+--- !u!1 &989390930
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 989390933}
+  - component: {fileID: 989390931}
+  - component: {fileID: 989390932}
+  m_Layer: 3
+  m_Name: TB Shield
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!95 &989390931
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 989390930}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: fcd94ec1b52fe0d48b88612a9cf98308, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!212 &989390932
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 989390930}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 11
+  m_Sprite: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 2.69, y: 2.69}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 0
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!4 &989390933
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 989390930}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.43, y: 1.5, z: -0.00024614824}
+  m_LocalScale: {x: 1.7219999, y: 1.7219999, z: 10.332}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 558991118}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1002651051
 GameObject:
   m_ObjectHideFlags: 0
@@ -5220,6 +5330,7 @@ MonoBehaviour:
   anim: {fileID: 1156979449}
   critAnim: {fileID: 0}
   specAnim: {fileID: 1873010397}
+  alreadyFreezed: 0
   sBoss: 0
 --- !u!1 &1805610606
 GameObject:
@@ -5491,7 +5602,7 @@ GameObject:
   - component: {fileID: 1873010397}
   - component: {fileID: 1873010398}
   m_Layer: 3
-  m_Name: SB Special Effect
+  m_Name: SB Shield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

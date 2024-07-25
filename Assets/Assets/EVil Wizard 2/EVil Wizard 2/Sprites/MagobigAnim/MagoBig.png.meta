@@ -33,7 +33,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -42,7 +42,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -115,7 +115,217 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: MagoBig_0
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 0
+        width: 57
+        height: 95
+      alignment: 9
+      pivot: {x: 0.48245615, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ad3edc7b8b8e1684aa99463e8ef055d0
+      internalID: 1791888000
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagoBig_1
+      rect:
+        serializedVersion: 2
+        x: 84
+        y: 0
+        width: 57
+        height: 95
+      alignment: 9
+      pivot: {x: 0.48245615, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4054b3949e27d8b4ab2b9d10ebd8c955
+      internalID: 2124544025
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagoBig_2
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 0
+        width: 57
+        height: 95
+      alignment: 9
+      pivot: {x: 0.48245615, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a2016d6473f038c4a9eae6aef35c3686
+      internalID: -885277648
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagoBig_3
+      rect:
+        serializedVersion: 2
+        x: 228
+        y: 0
+        width: 57
+        height: 95
+      alignment: 9
+      pivot: {x: 0.48245615, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2a9112151b4ee884e87dd06442a7d0da
+      internalID: -405391447
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagoBig_4
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 0
+        width: 57
+        height: 95
+      alignment: 9
+      pivot: {x: 0.48245615, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f69938c9fa7a74c4ebbe9d8308758d56
+      internalID: 2117234874
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagoBig_5
+      rect:
+        serializedVersion: 2
+        x: 372
+        y: 0
+        width: 57
+        height: 95
+      alignment: 9
+      pivot: {x: 0.48245615, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 32842ffd4cacd5d40b4fdfda6e5012e2
+      internalID: 2020830413
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagoBig_6
+      rect:
+        serializedVersion: 2
+        x: 444
+        y: 0
+        width: 57
+        height: 95
+      alignment: 9
+      pivot: {x: 0.48245615, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 719fb850b69586b4d9d01d2cefa5e665
+      internalID: 995837383
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagoBig_7
+      rect:
+        serializedVersion: 2
+        x: 516
+        y: 0
+        width: 57
+        height: 95
+      alignment: 9
+      pivot: {x: 0.48245615, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f38bfe5d83c351f40bb748fd07b324cd
+      internalID: 1672467395
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagoBig_8
+      rect:
+        serializedVersion: 2
+        x: 588
+        y: 0
+        width: 57
+        height: 95
+      alignment: 9
+      pivot: {x: 0.48245615, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 38bcb3efc5792ad4e95e067779a6e514
+      internalID: 375465914
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagoBig_9
+      rect:
+        serializedVersion: 2
+        x: 660
+        y: 0
+        width: 57
+        height: 95
+      alignment: 9
+      pivot: {x: 0.48245615, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8509bfbd3a44e964684694faee1e2476
+      internalID: 540910635
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -126,7 +336,21 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      MagoBig_0: 1791888000
+      MagoBig_1: 2124544025
+      MagoBig_10: 1493538786
+      MagoBig_11: -551417311
+      MagoBig_12: 949701105
+      MagoBig_13: 1319820693
+      MagoBig_2: -885277648
+      MagoBig_3: -405391447
+      MagoBig_4: 2117234874
+      MagoBig_5: 2020830413
+      MagoBig_6: 995837383
+      MagoBig_7: 1672467395
+      MagoBig_8: 375465914
+      MagoBig_9: 540910635
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

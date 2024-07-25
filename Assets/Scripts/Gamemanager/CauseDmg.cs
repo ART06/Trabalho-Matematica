@@ -20,7 +20,9 @@ public class CauseDmg : MonoBehaviour
             );
         foreach (var target in targets)
         {
-            target.GetComponent<Character>().TakeDmg(_character.atqDmg);
+            if (!GameManager.instance.missAtk)
+                target.GetComponent<Character>().TakeDmg(_character.atqDmg);
+            else Debug.Log("Errou ataque");
         }
     }
 }

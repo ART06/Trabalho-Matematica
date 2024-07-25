@@ -4,7 +4,6 @@ using UnityEngine;
 public class ThirdBoss : Enemy
 {
     public bool thirdBoss;
-    public bool alreadyFreezed;
 
     protected override void Start()
     {
@@ -34,12 +33,11 @@ public class ThirdBoss : Enemy
             {
                 StartCoroutine(nameof(FreezeEvent));
             }
-            else if (randomAction >= 9)
+            else if (randomAction >= 9 && Life.shield < Life.maxHealth)
             {
                 alreadyFreezed = false;
                 player.isFreeze = false;
-                if (enemy != null) anim.SetTrigger("Crit Atk");
-                Invoke("ActiveHabPanel", 1.5f);
+                StartCoroutine(ShieldHeal());
             }
             else
             {
@@ -48,15 +46,16 @@ public class ThirdBoss : Enemy
             }
         }
     }
-    public IEnumerator FreezeEvent()
+    public override void TakeDmg(int _value)
     {
-        if (enemy != null) anim.SetTrigger("Spec");
-        yield return new WaitForSeconds(0.5f);
-        alreadyFreezed = true;
-        player.isFreeze = true;
-        yield return new WaitForSeconds(2f);
-        GameManager.instance.enemyTurn = true;
-        enemy.BossRound();
+        base.TakeDmg(_value);
+
+        if (Life.shield <= 0 && Life.isShielded)
+        {
+            if (enemy != null) specAnim.SetBool("Is Shield", false);
+            if (enemy != null) specAnim.SetTrigger("Shield Break");
+            Life.isShielded = false;
+        }
     }
     public override void Death()
     {

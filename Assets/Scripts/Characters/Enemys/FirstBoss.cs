@@ -33,10 +33,7 @@ public class FirstBoss : Enemy
             }
             else if (randomAction >= 9)
             {
-                if (enemy != null) anim.SetTrigger("Crit Atk");
-                if (enemy != null) critAnim.SetTrigger("Crit");
-                StartCoroutine(nameof(EnemyDoubleDmg));
-                Invoke("ActiveHabPanel", 1.5f);
+                StartCoroutine(nameof(CritEvent));
             }
             else
             {
@@ -45,12 +42,11 @@ public class FirstBoss : Enemy
             }
         }
     }
-    public IEnumerator HealEvent()
+    public override IEnumerator CritEvent()
     {
-        if (enemy != null) specAnim.SetTrigger("Heal");
-        yield return new WaitForSeconds(0.5f);
-        Life.GetHeal(Life.healValue);
-        Invoke("ActiveHabPanel", 1.5f);
+        StartCoroutine(nameof(EnemyDoubleDmg));
+        if (enemy != null) critAnim.SetTrigger("Crit");
+        return base.CritEvent();
     }
     public override void Death()
     {

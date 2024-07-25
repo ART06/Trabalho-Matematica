@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
 
     [HideInInspector] public static GameManager instance;
 
-    [Header("Player and Enemy References")]
+    [Header("Scripts References")]
     [HideInInspector] public Enemy enemy;
     [HideInInspector] public Character character;
     [HideInInspector] public Player player;
@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     [Header("Game State Variables")]
     [HideInInspector] public bool isFighting;
     [HideInInspector] public bool isCalc;
+    [HideInInspector] public bool missAtk;
     [HideInInspector] public bool falseAnswerIsGenerated;
     [HideInInspector] public bool answerIsGenerated;
     [HideInInspector] public float remainTime;
@@ -36,6 +37,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public int correctAnswer;
     [HideInInspector] public int offset;
     [HideInInspector] public int lastRightPos;
+    [HideInInspector] public int missChance;
 
     public float maxTime;
     public bool enemyTurn;
@@ -83,6 +85,7 @@ public class GameManager : MonoBehaviour
         playerTurn = false;
         enemyTurn = false;
         lastRightPos = -1;
+        missAtk = false;
     }
     private void FixedUpdate()
     {

@@ -42,22 +42,6 @@ public class SecondBoss : Enemy
             }
         }
     }
-    public IEnumerator ShieldHeal()
-    {
-        Life.isShielded = true;
-        if (enemy != null) anim.SetTrigger("Spec");
-        if (enemy != null) specAnim.SetBool("Is Shield", true);
-        yield return new WaitForSeconds(0.5f);
-        Life.GetHeal(Life.shieldValue);
-        Invoke("ActiveHabPanel", 1f);
-    }
-    public IEnumerator CritEvent()
-    {
-        if (enemy != null) anim.SetTrigger("Attack");
-        yield return new WaitForSeconds(1f);
-        if (enemy != null) anim.SetTrigger("Attack");
-        Invoke("ActiveHabPanel", 1.5f);
-    }
     public override void TakeDmg(int _value)
     {
         base.TakeDmg(_value);

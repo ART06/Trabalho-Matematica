@@ -26,17 +26,20 @@ public class Enemy : Character
     }
     public IEnumerator WaitBossAction()
     {
-        GameManager.instance.missChance = Random.Range(1, 5);
-        if (GameManager.instance.missChance == 1) GameManager.instance.missAtk = true;
+        GameManager.instance.missChance = Random.Range(0, 4);
+        Debug.Log("Chance do erro: " + GameManager.instance.missChance);
+
+        yield return new WaitForSeconds(2);
+        if (GameManager.instance.missChance == 0) GameManager.instance.missAtk = true;
 
         if (GameManager.instance.healSkill.isHeal)
         {
-            yield return new WaitForSeconds(5f);
+            yield return new WaitForSeconds(2);
             GameManager.instance.enemyTurn = true;
         }
         else
         {
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(1);
             GameManager.instance.enemyTurn = true;
         }
     }

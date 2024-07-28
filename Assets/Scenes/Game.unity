@@ -761,7 +761,7 @@ MonoBehaviour:
   maxIterations: 0
   iterationCount: 0
   questionText: {fileID: 327626804}
-  roundCooldown: 3
+  roundCooldown: 4
   remainCooldown: 0
   isOnCooldown: 0
   canCooldown: 1
@@ -786,7 +786,7 @@ MonoBehaviour:
   maxIterations: 0
   iterationCount: 0
   questionText: {fileID: 327626804}
-  roundCooldown: 2
+  roundCooldown: 3
   remainCooldown: 0
   isOnCooldown: 0
   canCooldown: 1
@@ -2472,7 +2472,7 @@ MonoBehaviour:
   enemy: {fileID: 0}
   lifeAnim: {fileID: 814323099}
   health: 0
-  healValue: 3
+  healValue: 2
   maxHealth: 10
   dead: 0
   canHeal: 1
@@ -3331,7 +3331,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "kkkkk otario, aperta qualquer tecla a\xED"
+  m_text: aperte qualquer tecla para reiniciar
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9f8e9da126581474d8d0ffa681bbd697, type: 2}
   m_sharedMaterial: {fileID: -542151188269047091, guid: 9f8e9da126581474d8d0ffa681bbd697, type: 2}

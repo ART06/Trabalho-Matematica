@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
+using TMPro;
 
 public class LifeCtrl : MonoBehaviour
 {
@@ -77,7 +79,7 @@ public class LifeCtrl : MonoBehaviour
         {
             if (!player.isFreeze)
                 lifeAnim.SetTrigger("Hurt");
-            
+
             UpdateHealthBar();
             health = Mathf.Max(health - _dmg, 0);
         }
@@ -103,6 +105,7 @@ public class LifeCtrl : MonoBehaviour
             health = Mathf.Min(health + _heal, maxHealth);
         }
     }
+
     // Inicialize a barra de vida segmentada
     public void InitializeHealthBar(int maxHealth)
     {
@@ -142,7 +145,6 @@ public class LifeCtrl : MonoBehaviour
                 Image barImage = healthBars[i].GetComponent<Image>();
                 if (barImage != null)
                 {
-                    // Determine se a barrinha deve estar cheia ou vazia
                     barImage.color = i < health ? Color.green : Color.red;
                 }
             }
@@ -174,7 +176,6 @@ public class LifeCtrl : MonoBehaviour
                 Image barImage = shieldBars[i].GetComponent<Image>();
                 if (barImage != null)
                 {
-                    // Determine se a barrinha deve estar cheia ou vazia
                     barImage.fillAmount = i < shield ? 1 : 0;
                 }
             }
